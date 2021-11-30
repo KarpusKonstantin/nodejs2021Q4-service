@@ -2,21 +2,17 @@ const Router = require('koa-router');
 
 const router = new Router();
 
-const { StatusCodes} = require('http-status-codes');
-
-// const User = require('./user.model');
+// const Task = require('./user.model');
 // const usersService = require('./user.service');
 
 
 
-router.get('/users', async (ctx) => {
+router.get('/tasks', async (ctx) => {
 
   // const users = await usersService.getAll();
-
-  ctx.status = StatusCodes.OK;
-
-  ctx.body = 'Good';
-
+  // map user fields to exclude secret fields like "password"
+  ctx.status = 200;
+  ctx.body = 'Tasks';
   // ctx.responce.json(users.map(User.toResponse));
 
 });
