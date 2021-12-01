@@ -3,9 +3,8 @@
 // const YAML = require('yamljs');
 
 const Koa = require('koa');
-const KoaRouter = require('koa-router');
 const json = require('koa-json');
-const taskRouter = require('./resources/tasks/task.router');
+// const taskRouter = require('./resources/tasks/task.router');
 const userRouter = require('./resources/users/user.router');
 
 
@@ -15,14 +14,13 @@ const userRouter = require('./resources/users/user.router');
 
 
 const app = new Koa();
-const router = new KoaRouter();
 
 app.use(json());
 
 // app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 
-app.use(userRouter.routes()).use(router.allowedMethods());
-app.use(taskRouter.routes()).use(router.allowedMethods());
+app.use(userRouter.routes()).use(userRouter.allowedMethods());
+// app.use(taskRouter.routes()).use(router.allowedMethods());
 
 module.exports = app;

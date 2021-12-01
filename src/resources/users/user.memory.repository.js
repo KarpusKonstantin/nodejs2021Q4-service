@@ -1,6 +1,102 @@
-const getAll = async () => {
-  // TODO: mock implementation. should be replaced during task development
-  return [];
+const { StatusCodes } = require('http-status-codes');
+const User = require('./user.model');
+
+const users = [];
+
+const validateUserFields = (userData) => {
+  const result = {code: -1, message: ''}
+
+  if (!userData.name || userData.name === '') {
+    return {code: StatusCodes.BAD_REQUEST, message: 'Field [Name] is required. Please fill this field and try again'}
+  }
+
+  if (!userData.login || userData.login === '') {
+    return {code: StatusCodes.BAD_REQUEST, message: 'Field [login] is required. Please fill this field and try again'}
+  }
+
+  if (!userData.password || userData.password === 0) {
+    return {code: StatusCodes.BAD_REQUEST, message: 'Field [password] is required. Please fill this field and try again'}
+  }
+
+  return result;
+}
+
+const getAllUsers = async () => ({code: 200, message: users});
+
+const getUserById = async id => {
+  const result =  users.filter(item => item.id === id);
+
+  if (result.length === 0) {
+    return {code: StatusCodes.NOT_FOUND, message: `Person id =  ${id} not found in DB`};
+
+  }
+
+  return {code: StatusCodes.OK, message: result[0]};
 };
 
-module.exports = { getAll };
+const createUser = async (userData) => {
+  const result = validateUserFields(userData);
+
+  if (result.code !== -1) {
+    return result;
+  }
+
+  try {
+    const user = new User({...userData});
+    users.push(user.get());
+
+    return {code: StatusCodes.CREATED, message: user.get()};
+
+  } catch (e) {
+    return {code: StatusCodes.BAD_REQUEST, message: `Error create person object: ${e.message}`};
+  }
+};
+
+const updateUser = async (id, userData) => {
+  const user = users.filter(item => item.id === id);
+
+  if (user.length === 0) {
+    return {code: StatusCodes.NOT_FOUND, message: `User id = ${id} not found in DB`};
+  }
+
+  const result = validateUserFields(userData);
+
+  if (result.code !== -1) {
+    return result;
+  }
+
+  const index = users.indexOf(user[0]);
+
+  users[index].name = userData.name;
+  users[index].login = userData.login;
+  users[index].password = userData.password;
+
+  return {code: StatusCodes.OK, message: User.toResponse(users[index])};
+
+};
+
+const deleteUser = (id) => {
+  const result =  users.filter(item => item.id === id);
+
+  if (result.length === 0) {
+    return {code: StatusCodes.BAD_REQUEST, message: `Person id ${id} not found in DB`};
+  }
+
+  const index = users.indexOf(result[0]);
+
+  if (index > -1) {
+    users.splice(index, 1);
+
+    return {code: StatusCodes.NO_CONTENT, message: `Person id ${id} was deleted successfully`};
+  }
+
+  return {code: StatusCodes.BAD_REQUEST, message: `Person id ${id} not found in DB`};
+};
+
+module.exports = {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser
+};

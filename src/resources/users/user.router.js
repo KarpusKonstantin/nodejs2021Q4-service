@@ -2,24 +2,51 @@ const Router = require('koa-router');
 
 const router = new Router();
 
-const { StatusCodes} = require('http-status-codes');
-
-// const User = require('./user.model');
-// const usersService = require('./user.service');
-
-
+const usersService = require('./user.service');
 
 router.get('/users', async (ctx) => {
+  const users = await usersService.getAllUsers();
 
-  // const users = await usersService.getAll();
-
-  ctx.status = StatusCodes.OK;
-
-  ctx.body = 'Good';
-
-  // ctx.responce.json(users.map(User.toResponse));
-
+  ctx.status = users.code;
+  ctx.body = users.message;
 });
+
+router.get('/users/:id', async (ctx) => {
+  const users = await usersService.getUserById(ctx.params.id);
+
+  ctx.status = users.code;
+  ctx.body = users.message;
+});
+
+router.post('/users', async (ctx) => {
+  ctx.req.on('data', async (data) => {
+    const jsonData = JSON.parse(data);
+    const user = await usersService.createUser(jsonData);
+
+    ctx.status = user.code;
+    ctx.body = user.message;
+
+  });
+});
+
+router.put('/users/:id', async (ctx) => {
+  ctx.req.on('data', async (data) => {
+    const jsonData = JSON.parse(data);
+    const user = await usersService.updateUser(ctx.params.id, jsonData);
+
+    // console.log('USER >>', user);
+
+    ctx.status = user.code;
+    ctx.body = user.message;
+  });
+})
+
+router.delete('/users/:id', async (ctx) => {
+  const result = await usersService.deleteUser(ctx.params.id);
+
+  ctx.status = result.code;
+  ctx.body = result.message;
+})
 
 
 module.exports = router;
