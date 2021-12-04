@@ -27,7 +27,7 @@ const getUserById = async id => {
   const result =  users.filter(item => item.id === id);
 
   if (result.length === 0) {
-    return {code: StatusCodes.NOT_FOUND, message: `Person id =  ${id} not found in DB`};
+    return {code: StatusCodes.NOT_FOUND, message: `User id =  ${id} not found in DB`};
 
   }
 
@@ -48,7 +48,7 @@ const createUser = async (userData) => {
     return {code: StatusCodes.CREATED, message: user.get()};
 
   } catch (e) {
-    return {code: StatusCodes.BAD_REQUEST, message: `Error create person object: ${e.message}`};
+    return {code: StatusCodes.BAD_REQUEST, message: `Error create User object: ${e.message}`};
   }
 };
 
@@ -79,7 +79,7 @@ const deleteUser = (id) => {
   const result =  users.filter(item => item.id === id);
 
   if (result.length === 0) {
-    return {code: StatusCodes.BAD_REQUEST, message: `Person id ${id} not found in DB`};
+    return {code: StatusCodes.BAD_REQUEST, message: `User id ${id} not found in DB`};
   }
 
   const index = users.indexOf(result[0]);
@@ -87,10 +87,10 @@ const deleteUser = (id) => {
   if (index > -1) {
     users.splice(index, 1);
 
-    return {code: StatusCodes.NO_CONTENT, message: `Person id ${id} was deleted successfully`};
+    return {code: StatusCodes.NO_CONTENT, message: `User id ${id} was deleted successfully`};
   }
 
-  return {code: StatusCodes.BAD_REQUEST, message: `Person id ${id} not found in DB`};
+  return {code: StatusCodes.BAD_REQUEST, message: `User id ${id} not found in DB`};
 };
 
 module.exports = {

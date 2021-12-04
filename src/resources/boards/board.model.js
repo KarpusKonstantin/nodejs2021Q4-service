@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const Column = require('../columns/column.model');
 
-class Border {
+class Board {
   constructor({
     id = uuidv4(),
     title = 'Default',
@@ -29,4 +29,4 @@ class Border {
 
 
 
-module.exports = Border;
+module.exports = Board;
