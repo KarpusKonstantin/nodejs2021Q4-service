@@ -2,26 +2,26 @@ const Router = require('koa-router');
 
 const router = new Router();
 
-const usersService = require('./user.service');
+const boardsService = require('./board.service');
 
-router.get('/users', async (ctx) => {
-  const users = await usersService.getAllUsers();
-
-  ctx.status = users.code;
-  ctx.body = users.message;
-});
-
-router.get('/users/:id', async (ctx) => {
-  const users = await usersService.getUserById(ctx.params.id);
+router.get('/boards', async (ctx) => {
+  const users = await boardsService.getAllBoards();
 
   ctx.status = users.code;
   ctx.body = users.message;
 });
 
-router.post('/users', async (ctx) => {
+router.get('/boards/:id', async (ctx) => {
+  const users = await boardsService.getBoardById(ctx.params.id);
+
+  ctx.status = users.code;
+  ctx.body = users.message;
+});
+
+router.post('/boards', async (ctx) => {
   ctx.req.on('data', async (data) => {
     const jsonData = JSON.parse(data);
-    const user = await usersService.createUser(jsonData);
+    const user = await boardsService.createBoard(jsonData);
 
     ctx.status = user.code;
     ctx.body = user.message;
@@ -29,18 +29,18 @@ router.post('/users', async (ctx) => {
   });
 });
 
-router.put('/users/:id', async (ctx) => {
+router.put('/boards/:id', async (ctx) => {
   ctx.req.on('data', async (data) => {
     const jsonData = JSON.parse(data);
-    const user = await usersService.updateUser(ctx.params.id, jsonData);
+    const user = await boardsService.updateBoard(ctx.params.id, jsonData);
 
     ctx.status = user.code;
     ctx.body = user.message;
   });
 })
 
-router.delete('/users/:id', async (ctx) => {
-  const result = usersService.deleteUser(ctx.params.id);
+router.delete('/boards/:id', async (ctx) => {
+  const result = boardsService.deleteBoard(ctx.params.id);
 
   ctx.status = result.code;
   ctx.body = result.message;
