@@ -42,7 +42,7 @@ router.put('/users/:id', async (ctx) => {
 })
 
 router.delete('/users/:id', async (ctx) => {
-  const result = await usersService.deleteUser(ctx.params.id);
+  const result = usersService.deleteUser(ctx.params.id);
 
   ctx.status = result.code;
   ctx.body = result.message;
