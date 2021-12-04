@@ -73,10 +73,25 @@ const deleteTask = (boardId, taskId) => {
   return {code: StatusCodes.BAD_REQUEST, message: `Task id ${taskId} not found in DB`};
 };
 
+const setUserIdToNull = async (userId) => {
+  try {
+    tasks.forEach((item) => {
+      if (item.userId === userId) {
+        // eslint-disable-next-line no-param-reassign
+        item.userId = null;
+      }
+    })
+
+  } catch (e) {
+    // console.error(e);
+  }
+};
+
 module.exports = {
   getAllTaskByBoardId,
   getTaskByBoardIdAndTaskId,
   createTask,
   updateTask,
-  deleteTask
+  deleteTask,
+  setUserIdToNull
 };
