@@ -16,7 +16,7 @@ const getBoardById = async id => {
   return {code: StatusCodes.OK, message: result[0]};
 };
 
-const createUser = async (boardData) => {
+const createBoard = async (boardData) => {
   try {
     const board = new Board({...boardData});
     boards.push(board.get());
@@ -37,9 +37,8 @@ const updateBoard = async (id, boardData) => {
 
   const index = boards.indexOf(board[0]);
 
-  boards[index].name = boardData.name;
-  boards[index].login = boardData.login;
-  boards[index].password = boardData.password;
+  boards[index].title = boardData.title;
+  boards[index].columns = boardData.columns;
 
   return {code: StatusCodes.OK, message: Board.toResponse(boards[index])};
 
@@ -66,7 +65,7 @@ const deleteBoard = (id) => {
 module.exports = {
   getAllBoards,
   getBoardById,
-  createUser,
+  createBoard,
   updateBoard,
   deleteBoard
 };

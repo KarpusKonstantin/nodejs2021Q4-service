@@ -10,6 +10,8 @@ const updateUser =  (id, userData) =>  usersRepository.updateUser(id, userData);
 const deleteUser = (id) => {
   const result = usersRepository.deleteUser(id);
 
+  // Надо делать перевода в NULL всех связанных объектов
+
   return { code: StatusCodes.OK, message: result.message }
 }
 
