@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 
 const usersRepository = require('./user.memory.repository');
+const { setUserIdToNull } = require('../tasks/task.memory.repository');
 
 const getAllUsers = () => usersRepository.getAllUsers();
 const getUserById =  (id) => usersRepository.getUserById(id);
@@ -10,7 +11,7 @@ const updateUser =  (id, userData) =>  usersRepository.updateUser(id, userData);
 const deleteUser = (id) => {
   const result = usersRepository.deleteUser(id);
 
-  // Надо делать перевода в NULL всех связанных объектов
+  setUserIdToNull(id);
 
   return { code: StatusCodes.OK, message: result.message }
 }

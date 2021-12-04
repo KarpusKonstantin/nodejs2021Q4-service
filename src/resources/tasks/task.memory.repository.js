@@ -73,7 +73,17 @@ const deleteTask = (boardId, taskId) => {
   return {code: StatusCodes.BAD_REQUEST, message: `Task id ${taskId} not found in DB`};
 };
 
-const setUserIdToNull = async (userId) => {
+const deleteTasksByBorderId = (borderId) => {
+  for( let i = 0; i < tasks.length; i += 1){
+
+    if (tasks[i].boardId === borderId) {
+      tasks.splice(i, 1);
+      i -= 1;
+    }
+  }
+}
+
+const setUserIdToNull = (userId) => {
   try {
     tasks.forEach((item) => {
       if (item.userId === userId) {
@@ -93,5 +103,6 @@ module.exports = {
   createTask,
   updateTask,
   deleteTask,
-  setUserIdToNull
+  setUserIdToNull,
+  deleteTasksByBorderId
 };

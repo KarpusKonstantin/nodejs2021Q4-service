@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 
 const boardsRepository = require('./board.memory.repository');
+const { deleteTasksByBorderId } = require('../tasks/task.memory.repository');
 
 const getAllBoards = () => boardsRepository.getAllBoards();
 const getBoardById =  (id) => boardsRepository.getBoardById(id);
@@ -10,7 +11,7 @@ const updateBoard =  (id, boardData) =>  boardsRepository.updateBoard(id, boardD
 const deleteBoard = (id) => {
   const result = boardsRepository.deleteBoard(id);
 
-  // Удалять все связанные таски
+  deleteTasksByBorderId(id);
 
   return { code: StatusCodes.OK, message: result.message }
 }

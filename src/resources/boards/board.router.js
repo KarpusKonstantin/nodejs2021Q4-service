@@ -34,8 +34,6 @@ router.put('/boards/:id', async (ctx) => {
     const jsonData = JSON.parse(data);
     const user = await boardsService.updateBoard(ctx.params.id, jsonData);
 
-    // console.log('USER >>', user);
-
     ctx.status = user.code;
     ctx.body = user.message;
   });
