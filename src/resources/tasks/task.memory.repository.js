@@ -85,12 +85,11 @@ const deleteTasksByBorderId = (borderId) => {
 
 const setUserIdToNull = (userId) => {
   try {
-    tasks.forEach((item) => {
-      if (item.userId === userId) {
-        // eslint-disable-next-line no-param-reassign
-        item.userId = null;
+    for (let i = 0; i < tasks.length; i += 1) {
+      if (tasks[i].userId === userId) {
+        tasks[i].userId = null;
       }
-    })
+    }
 
   } catch (e) {
     // console.error(e);
