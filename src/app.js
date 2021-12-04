@@ -10,10 +10,7 @@ const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
 
 
-
-
 // const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
-
 
 const app = new Koa();
 
