@@ -4,7 +4,7 @@ import Column from '../columns/column.model';
 export interface IBoard {
   id: string,
   title: string,
-  columns: string
+  columns: Column[]
 }
 
 
@@ -23,7 +23,7 @@ class Board {
     this.columns = columns;
   }
 
-  get() {
+  get(): IBoard {
     return {
       id: this.id,
       title: this.title,
@@ -31,7 +31,7 @@ class Board {
     }
   }
 
-  static toResponse(board: IBoard) {
+  static toResponse(board: IBoard): IBoard {
     const { id, title, columns } = board;
     return { id, title, columns };
   }

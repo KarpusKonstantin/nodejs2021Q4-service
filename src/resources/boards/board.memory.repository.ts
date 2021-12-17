@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
 import Board, { IBoard } from './board.model';
+import IResultToResponse from '../../common/globalInterafaces';
 
 const boards: IBoard[] = [];
 
-const getAllBoards = async () => ({code: 200, message: boards});
+const getAllBoards = async (): Promise<IResultToResponse> => ({code: 200, message: boards});
 
-const getBoardById = async (id: string) => {
+const getBoardById = async (id: string): Promise<IResultToResponse> => {
   const result: IBoard[] =  boards.filter(item => item.id === id);
 
   if (result.length === 0) {
@@ -16,7 +17,7 @@ const getBoardById = async (id: string) => {
   return {code: StatusCodes.OK, message: result[0]};
 };
 
-const createBoard = async (boardData) => {
+const createBoard = async (boardData: IBoard): Promise<IResultToResponse> => {
   try {
     const board = new Board({...boardData});
     boards.push(board.get());
@@ -28,7 +29,7 @@ const createBoard = async (boardData) => {
   }
 };
 
-const updateBoard = async (id, boardData) => {
+const updateBoard = async (id: string, boardData: IBoard): Promise<IResultToResponse> => {
   const board = boards.filter(item => item.id === id);
 
   if (board.length === 0) {
@@ -44,7 +45,7 @@ const updateBoard = async (id, boardData) => {
 
 };
 
-const deleteBoard = (id) => {
+const deleteBoard = (id: string): IResultToResponse => {
   const result =  boards.filter(item => item.id === id);
 
   if (result.length === 0) {
