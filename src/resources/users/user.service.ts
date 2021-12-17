@@ -5,11 +5,43 @@ import { setUserIdToNull } from '../tasks/task.memory.repository';
 import IResultToResponse from '../../common/globalInterafaces';
 import { IUser } from './user.model';
 
-const getAllUsers = async (): Promise<IResultToResponse> => usersRepository.getAllUsers();
-const getUserById =  async (id: string): Promise<IResultToResponse> => usersRepository.getUserById(id);
+
+/**
+ * Returns all user list
+ * @returns IResultToResponse - code = http status code (type is number) and message = user list
+ */
+const getAllUsers = (): IResultToResponse => usersRepository.getAllUsers();
+
+
+/**
+ * Returns user by ID
+ * @param id - user ID
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
+ */
+const getUserById =  (id: string): IResultToResponse => usersRepository.getUserById(id);
+
+
+/**
+ * Create new user
+ * @param userData - user data (IUser)
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
+ */
 const createUser =  (userData: IUser): IResultToResponse => usersRepository.createUser(userData);
+
+
+/**
+ * Update record of board
+ * @param id - user id
+ * @param userData - user data (IUser)
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
+ */
 const updateUser =  (id: string, userData: IUser): IResultToResponse => usersRepository.updateUser(id, userData);
 
+/**
+ * Delete record of users and set to null all links in tasks
+ * @param id - user id
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
+ */
 const deleteUser = (id: string): IResultToResponse => {
   const result: IResultToResponse = usersRepository.deleteUser(id);
 

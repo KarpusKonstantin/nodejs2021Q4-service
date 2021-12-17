@@ -22,9 +22,19 @@ const validateUserFields = (userData: IUser): IResultToResponse => {
   return result;
 }
 
-const getAllUsers = async (): Promise<IResultToResponse> => ({code: 200, message: users});
+/**
+ * Returns all user list
+ * @returns IResultToResponse - code = http status code (type is number) and message = user array
+ */
+const getAllUsers = (): IResultToResponse => ({code: 200, message: users});
 
-const getUserById = async (id: string): Promise<IResultToResponse> => {
+
+/**
+ * Returns user by ID
+ * @param id - user ID
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
+ */
+const getUserById = (id: string): IResultToResponse => {
   const result =  users.filter(item => item.id === id);
 
   if (result.length === 0) {
@@ -35,6 +45,11 @@ const getUserById = async (id: string): Promise<IResultToResponse> => {
   return {code: StatusCodes.OK, message: result[0]};
 };
 
+/**
+ * Create new user
+ * @param userData - user data (IUser)
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
+ */
 const createUser = (userData: IUser): IResultToResponse => {
   const result = validateUserFields(userData);
 
@@ -53,6 +68,12 @@ const createUser = (userData: IUser): IResultToResponse => {
   }
 };
 
+/**
+ * Update record of board
+ * @param id - user id
+ * @param userData - user data (IUser)
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
+ */
 const updateUser = (id: string, userData: IUser): IResultToResponse => {
   const user = users.filter(item => item.id === id);
 
@@ -76,6 +97,11 @@ const updateUser = (id: string, userData: IUser): IResultToResponse => {
 
 };
 
+/**
+ * Delete record of users
+ * @param id - user id
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
+ */
 const deleteUser = (id: string): IResultToResponse => {
   const result =  users.filter(item => item.id === id);
 

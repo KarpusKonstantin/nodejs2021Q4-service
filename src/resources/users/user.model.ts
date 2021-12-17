@@ -7,7 +7,9 @@ export interface IUser {
   password?: string;
 }
 
-
+/**
+ * User model which implement interface IUser
+ */
 class User implements IUser{
   id: string;
   login: string;
@@ -26,6 +28,10 @@ class User implements IUser{
     this.password = password;
   }
 
+  /**
+   * Return instance
+   * @returns IUser
+   */
   get(): IUser {
     return {
       id: this.id,
@@ -34,6 +40,11 @@ class User implements IUser{
     }
   }
 
+  /**
+   * Static method which return board object
+   * @param user - user data (IUser)
+   * @returns IUser
+   */
   static toResponse(user: IUser): IUser {
     const { id, name, login } = user;
     return { id, name, login };
