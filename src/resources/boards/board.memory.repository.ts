@@ -4,9 +4,18 @@ import IResultToResponse from '../../common/globalInterafaces';
 
 const boards: IBoard[] = [];
 
-const getAllBoards = async (): Promise<IResultToResponse> => ({code: 200, message: boards});
+/**
+ * Returns all board list
+ * @returns IResultToResponse - code = http status code (type is number) and message = board list
+ */
+const getAllBoards = (): IResultToResponse => ({code: 200, message: boards});
 
-const getBoardById = async (id: string): Promise<IResultToResponse> => {
+/**
+ * Returns board by ID
+ * @param id - Board ID
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
+ */
+const getBoardById = (id: string): IResultToResponse => {
   const result: IBoard[] =  boards.filter(item => item.id === id);
 
   if (result.length === 0) {
@@ -17,6 +26,11 @@ const getBoardById = async (id: string): Promise<IResultToResponse> => {
   return {code: StatusCodes.OK, message: result[0]};
 };
 
+/**
+ * Create new board
+ * @param boardData - board data (IBoard)
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
+ */
 const createBoard = (boardData: IBoard): IResultToResponse => {
   try {
     const board = new Board({...boardData});
@@ -29,6 +43,12 @@ const createBoard = (boardData: IBoard): IResultToResponse => {
   }
 };
 
+/**
+ * Update record of board
+ * @param id - board id
+ * @param boardData - board data (IBoard)
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
+ */
 const updateBoard = (id: string, boardData: IBoard): IResultToResponse => {
   const board = boards.filter(item => item.id === id);
 
@@ -45,6 +65,11 @@ const updateBoard = (id: string, boardData: IBoard): IResultToResponse => {
 
 };
 
+/**
+ * Delete record of board
+ * @param id - board id
+ * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
+ */
 const deleteBoard = (id: string): IResultToResponse => {
   const result =  boards.filter(item => item.id === id);
 
