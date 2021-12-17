@@ -1,8 +1,8 @@
-const Router = require('koa-router');
+import Router from 'koa-router';
+import tasksService from './task.service';
 
 const router = new Router();
 
-const tasksService = require('./task.service');
 
 router.get('/boards/:boardId/tasks', async (ctx) => {
   const users = await tasksService.getAllTaskByBoardId(ctx.params.boardId);
@@ -47,4 +47,4 @@ router.delete('/boards/:boardId/tasks/:id', async (ctx) => {
 })
 
 
-module.exports = router;
+export default router;

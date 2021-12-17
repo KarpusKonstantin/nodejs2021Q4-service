@@ -1,7 +1,7 @@
-const { StatusCodes } = require('http-status-codes');
+import { StatusCodes } from 'http-status-codes';
 
-const usersRepository = require('./user.memory.repository');
-const { setUserIdToNull } = require('../tasks/task.memory.repository');
+import usersRepository from './user.memory.repository';
+import { setUserIdToNull } from '../tasks/task.memory.repository';
 
 const getAllUsers = () => usersRepository.getAllUsers();
 const getUserById =  (id) => usersRepository.getUserById(id);
@@ -17,4 +17,4 @@ const deleteUser = (id) => {
 }
 
 
-module.exports = { getAllUsers, getUserById, createUser, updateUser, deleteUser };
+export default { getAllUsers, getUserById, createUser, updateUser, deleteUser };

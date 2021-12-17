@@ -1,7 +1,18 @@
-const { v4: uuidv4 } = require('uuid');
-const Column = require('../columns/column.model');
+import { v4 as uuidv4 } from 'uuid';
+import Column from '../columns/column.model';
+
+export interface IBoard {
+  id: string,
+  title: string,
+  columns: string
+}
+
 
 class Board {
+  title: string;
+  id: string;
+  columns: Column[];
+
   constructor({
     id = uuidv4(),
     title = 'Default',
@@ -20,13 +31,10 @@ class Board {
     }
   }
 
-  static toResponse(board) {
+  static toResponse(board: IBoard) {
     const { id, title, columns } = board;
     return { id, title, columns };
   }
 }
 
-
-
-
-module.exports = Board;
+export default Board;

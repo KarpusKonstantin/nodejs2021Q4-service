@@ -1,8 +1,7 @@
-const Router = require('koa-router');
+import Router from 'koa-router';
+import boardsService from './board.service';
 
 const router = new Router();
-
-const boardsService = require('./board.service');
 
 router.get('/boards', async (ctx) => {
   const users = await boardsService.getAllBoards();
@@ -47,4 +46,4 @@ router.delete('/boards/:id', async (ctx) => {
 })
 
 
-module.exports = router;
+export default router;

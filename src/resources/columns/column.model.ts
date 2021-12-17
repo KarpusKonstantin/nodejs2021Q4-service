@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
 class Column {
   constructor({ id = uuidv4(), title, order } = {}) {
@@ -16,4 +16,4 @@ class Column {
   }
 }
 
-module.exports = Column;
+export default Column;

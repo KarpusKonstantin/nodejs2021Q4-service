@@ -1,5 +1,5 @@
-const { StatusCodes } = require('http-status-codes');
-const Task = require('./task.model');
+import { StatusCodes } from 'http-status-codes';
+import Task from './task.model';
 
 const tasks = [];
 
@@ -96,7 +96,7 @@ const setUserIdToNull = (userId) => {
   }
 };
 
-module.exports = {
+export default {
   getAllTaskByBoardId,
   getTaskByBoardIdAndTaskId,
   createTask,

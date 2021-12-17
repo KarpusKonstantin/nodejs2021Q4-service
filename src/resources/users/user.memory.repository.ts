@@ -1,5 +1,5 @@
-const { StatusCodes } = require('http-status-codes');
-const User = require('./user.model');
+import { StatusCodes } from 'http-status-codes';
+import User from './user.model';
 
 const users = [];
 
@@ -93,7 +93,7 @@ const deleteUser = (id) => {
   return {code: StatusCodes.BAD_REQUEST, message: `User id ${id} not found in DB`};
 };
 
-module.exports = {
+export default {
   getAllUsers,
   getUserById,
   createUser,

@@ -1,12 +1,12 @@
-const { StatusCodes } = require('http-status-codes');
-const Board = require('./board.model');
+import { StatusCodes } from 'http-status-codes';
+import Board, { IBoard } from './board.model';
 
-const boards = [];
+const boards: IBoard[] = [];
 
 const getAllBoards = async () => ({code: 200, message: boards});
 
-const getBoardById = async id => {
-  const result =  boards.filter(item => item.id === id);
+const getBoardById = async (id: string) => {
+  const result: IBoard[] =  boards.filter(item => item.id === id);
 
   if (result.length === 0) {
     return {code: StatusCodes.NOT_FOUND, message: `Person id =  ${id} not found in DB`};
@@ -62,7 +62,7 @@ const deleteBoard = (id) => {
   return {code: StatusCodes.BAD_REQUEST, message: `Board id ${id} not found in DB`};
 };
 
-module.exports = {
+export default {
   getAllBoards,
   getBoardById,
   createBoard,

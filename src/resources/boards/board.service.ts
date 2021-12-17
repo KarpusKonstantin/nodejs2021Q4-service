@@ -1,7 +1,7 @@
-const { StatusCodes } = require('http-status-codes');
+import { StatusCodes } from 'http-status-codes';
 
-const boardsRepository = require('./board.memory.repository');
-const { deleteTasksByBorderId } = require('../tasks/task.memory.repository');
+import boardsRepository from './board.memory.repository';
+import { deleteTasksByBorderId } from '../tasks/task.memory.repository';
 
 const getAllBoards = () => boardsRepository.getAllBoards();
 const getBoardById =  (id) => boardsRepository.getBoardById(id);
@@ -17,4 +17,4 @@ const deleteBoard = (id) => {
 }
 
 
-module.exports = { getAllBoards, getBoardById, createBoard, updateBoard, deleteBoard };
+export default { getAllBoards, getBoardById, createBoard, updateBoard, deleteBoard };

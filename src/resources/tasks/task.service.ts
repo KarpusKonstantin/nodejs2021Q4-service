@@ -1,6 +1,5 @@
-const { StatusCodes } = require('http-status-codes');
-
-const tasksRepository = require('./task.memory.repository');
+import { StatusCodes } from 'http-status-codes';
+import tasksRepository from './task.memory.repository';
 
 const getAllTaskByBoardId = (boardId) => tasksRepository.getAllTaskByBoardId(boardId);
 const getTaskByBoardIdAndTaskId =  (boardId, taskId) => tasksRepository.getTaskByBoardIdAndTaskId(boardId, taskId);
@@ -14,4 +13,4 @@ const deleteUser = (boardId, taskId) => {
 }
 
 
-module.exports = { getAllTaskByBoardId, getTaskByBoardIdAndTaskId, createTask, updateTask, deleteUser };
+export default { getAllTaskByBoardId, getTaskByBoardIdAndTaskId, createTask, updateTask, deleteUser };
