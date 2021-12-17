@@ -8,7 +8,14 @@ export interface IBoard {
 }
 
 
+/**
+ * Model board which implement interface IBoard
+ */
 class Board implements IBoard{
+  columns: Column[];
+  id: string;
+  title: string;
+
   constructor({
     id = uuidv4(),
     title = 'Default',
@@ -19,6 +26,10 @@ class Board implements IBoard{
     this.columns = columns;
   }
 
+  /**
+   * Return instance
+   * @returns IBoard
+   */
   get(): IBoard {
     return {
       id: this.id,
@@ -27,14 +38,15 @@ class Board implements IBoard{
     }
   }
 
+  /**
+   * Static method which return board object
+   * @param board - board data (IBoard)
+   * @returns IBoard
+   */
   static toResponse(board: IBoard): IBoard {
     const { id, title, columns } = board;
     return { id, title, columns };
   }
-
-  columns: Column[];
-  id: string;
-  title: string;
 }
 
 export default Board;
