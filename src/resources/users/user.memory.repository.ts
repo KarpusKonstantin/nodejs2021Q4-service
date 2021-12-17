@@ -4,6 +4,12 @@ import IResultToResponse from '../../common/globalInterafaces';
 
 const users: IUser[] = [];
 
+/**
+ * Check validate User Data
+ * @param userData - user data (IUser)
+ * @returns IResultToResponse - code = http status code (type is number) and message = string
+ */
+
 const validateUserFields = (userData: IUser): IResultToResponse => {
   const result = {code: -1, message: ''}
 
