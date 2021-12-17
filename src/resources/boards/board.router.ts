@@ -20,7 +20,7 @@ router.get('/boards/:id', async (ctx) => {
 router.post('/boards', async (ctx) => {
   ctx.req.on('data', async (data) => {
     const jsonData = JSON.parse(data);
-    const user = await boardsService.createBoard(jsonData);
+    const user = boardsService.createBoard(jsonData);
 
     ctx.status = user.code;
     ctx.body = user.message;
@@ -31,7 +31,7 @@ router.post('/boards', async (ctx) => {
 router.put('/boards/:id', async (ctx) => {
   ctx.req.on('data', async (data) => {
     const jsonData = JSON.parse(data);
-    const user = await boardsService.updateBoard(ctx.params.id, jsonData);
+    const user = boardsService.updateBoard(ctx.params.id, jsonData);
 
     ctx.status = user.code;
     ctx.body = user.message;

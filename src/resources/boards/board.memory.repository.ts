@@ -17,7 +17,7 @@ const getBoardById = async (id: string): Promise<IResultToResponse> => {
   return {code: StatusCodes.OK, message: result[0]};
 };
 
-const createBoard = async (boardData: IBoard): Promise<IResultToResponse> => {
+const createBoard = (boardData: IBoard): IResultToResponse => {
   try {
     const board = new Board({...boardData});
     boards.push(board.get());
@@ -29,7 +29,7 @@ const createBoard = async (boardData: IBoard): Promise<IResultToResponse> => {
   }
 };
 
-const updateBoard = async (id: string, boardData: IBoard): Promise<IResultToResponse> => {
+const updateBoard = (id: string, boardData: IBoard): IResultToResponse => {
   const board = boards.filter(item => item.id === id);
 
   if (board.length === 0) {

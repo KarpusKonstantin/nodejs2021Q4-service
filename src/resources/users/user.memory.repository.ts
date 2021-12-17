@@ -35,7 +35,7 @@ const getUserById = async (id: string): Promise<IResultToResponse> => {
   return {code: StatusCodes.OK, message: result[0]};
 };
 
-const createUser = async (userData: IUser): Promise<IResultToResponse> => {
+const createUser = (userData: IUser): IResultToResponse => {
   const result = validateUserFields(userData);
 
   if (result.code !== -1) {
@@ -53,7 +53,7 @@ const createUser = async (userData: IUser): Promise<IResultToResponse> => {
   }
 };
 
-const updateUser = async (id: string, userData: IUser): Promise<IResultToResponse> => {
+const updateUser = (id: string, userData: IUser): IResultToResponse => {
   const user = users.filter(item => item.id === id);
 
   if (user.length === 0) {

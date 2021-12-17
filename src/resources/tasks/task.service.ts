@@ -5,8 +5,8 @@ import { ITask } from './task.model';
 
 const getAllTaskByBoardId = async (boardId: string): Promise<IResultToResponse> => tasksRepository.getAllTaskByBoardId(boardId);
 const getTaskByBoardIdAndTaskId = async (boardId: string, taskId: string): Promise<IResultToResponse> => tasksRepository.getTaskByBoardIdAndTaskId(boardId, taskId);
-const createTask =  async (boardId: string, taskData: ITask): Promise<IResultToResponse> => tasksRepository.createTask(boardId, taskData);
-const updateTask =  async (boardId: string, taskId: string, taskData: ITask): Promise<IResultToResponse> =>  tasksRepository.updateTask(boardId, taskId, taskData);
+const createTask =  (boardId: string | null | undefined, taskData: ITask): IResultToResponse => tasksRepository.createTask(boardId, taskData);
+const updateTask =  (boardId: string, taskId: string, taskData: ITask): IResultToResponse =>  tasksRepository.updateTask(boardId, taskId, taskData);
 
 const deleteUser = (boardId: string, taskId: string): IResultToResponse => {
   const result = tasksRepository.deleteTask(boardId, taskId);

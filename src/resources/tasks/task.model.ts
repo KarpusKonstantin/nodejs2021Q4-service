@@ -6,12 +6,12 @@ export interface ITask {
   order: string;
   description: string;
   userId: string | null;
-  boardId: string | null;
+  boardId: string | null | undefined;
   columnId: string | null;
 }
 
 class Task implements ITask{
-  boardId: string | null;
+  boardId: string | null | undefined;
   columnId: string | null;
   description: string;
   id: string;

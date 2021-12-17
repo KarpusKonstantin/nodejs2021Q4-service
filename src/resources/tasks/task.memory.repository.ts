@@ -21,10 +21,15 @@ const getTaskByBoardIdAndTaskId = async (boardId: string, taskId: string): Promi
   return {code: StatusCodes.OK, message: result[0]};
 };
 
-const createTask = async (boardId: string, taskData: ITask): Promise<IResultToResponse> => {
+const createTask = (boardId: string | null | undefined, taskData: ITask): IResultToResponse => {
   try {
     const result: ITask = taskData;
-    result.boardId = boardId;
+
+    if (result.boardId === 'undefined') {
+      result.boardId = undefined;
+    } else {
+      result.boardId = boardId;
+    }
 
     const task = new Task({...result});
     tasks.push(task.get());
@@ -36,7 +41,7 @@ const createTask = async (boardId: string, taskData: ITask): Promise<IResultToRe
   }
 };
 
-const updateTask = async (boardId: string, taskId: string, taskData: ITask): Promise<IResultToResponse> => {
+const updateTask = (boardId: string, taskId: string, taskData: ITask): IResultToResponse => {
   const result =  tasks.filter(item => (item.boardId === boardId) && (item.id === taskId));
 
   if (result.length === 0) {
@@ -74,7 +79,7 @@ const deleteTask = (boardId: string, taskId: string): IResultToResponse => {
   return {code: StatusCodes.BAD_REQUEST, message: `Task id ${taskId} not found in DB`};
 };
 
-const deleteTasksByBorderId = (borderId: string): void => {
+export const deleteTasksByBorderId = (borderId: string): void => {
   for( let i = 0; i < tasks.length; i += 1){
 
     if (tasks[i].boardId === borderId) {
@@ -84,7 +89,7 @@ const deleteTasksByBorderId = (borderId: string): void => {
   }
 }
 
-export const setUserIdToNull = (userId: string): void => {
+export const setUserIdToNull = (userId: string) => {
   try {
     for (let i = 0; i < tasks.length; i += 1) {
       if (tasks[i].userId === userId) {

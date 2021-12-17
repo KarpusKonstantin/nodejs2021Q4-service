@@ -21,7 +21,7 @@ router.get('/boards/:boardId/tasks/:id', async (ctx) => {
 router.post('/boards/:boardId/tasks', async (ctx) => {
   ctx.req.on('data', async (data) => {
     const jsonData = JSON.parse(data);
-    const user = await tasksService.createTask(ctx.params.boardId, jsonData);
+    const user = tasksService.createTask(ctx.params.boardId, jsonData);
 
     ctx.status = user.code;
     ctx.body = user.message;
@@ -32,7 +32,7 @@ router.post('/boards/:boardId/tasks', async (ctx) => {
 router.put('/boards/:boardId/tasks/:id', async (ctx) => {
   ctx.req.on('data', async (data) => {
     const jsonData = JSON.parse(data);
-    const user = await tasksService.updateTask(ctx.params.boardId, ctx.params.id, jsonData);
+    const user = tasksService.updateTask(ctx.params.boardId, ctx.params.id, jsonData);
 
     ctx.status = user.code;
     ctx.body = user.message;

@@ -21,7 +21,7 @@ router.get('/users/:id', async (ctx) => {
 router.post('/users', async (ctx) => {
   ctx.req.on('data', async (data) => {
     const jsonData = JSON.parse(data);
-    const user = await usersService.createUser(jsonData);
+    const user = usersService.createUser(jsonData);
 
     ctx.status = user.code;
     ctx.body = user.message;
@@ -32,7 +32,7 @@ router.post('/users', async (ctx) => {
 router.put('/users/:id', async (ctx) => {
   ctx.req.on('data', async (data) => {
     const jsonData = JSON.parse(data);
-    const user = await usersService.updateUser(ctx.params.id, jsonData);
+    const user = usersService.updateUser(ctx.params.id, jsonData);
 
     ctx.status = user.code;
     ctx.body = user.message;

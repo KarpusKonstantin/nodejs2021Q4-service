@@ -7,8 +7,8 @@ import { IUser } from './user.model';
 
 const getAllUsers = async (): Promise<IResultToResponse> => usersRepository.getAllUsers();
 const getUserById =  async (id: string): Promise<IResultToResponse> => usersRepository.getUserById(id);
-const createUser =  async (userData: IUser): Promise<IResultToResponse>=> usersRepository.createUser(userData);
-const updateUser =  async (id: string, userData: IUser): Promise<IResultToResponse> =>  usersRepository.updateUser(id, userData);
+const createUser =  (userData: IUser): IResultToResponse => usersRepository.createUser(userData);
+const updateUser =  (id: string, userData: IUser): IResultToResponse => usersRepository.updateUser(id, userData);
 
 const deleteUser = (id: string): IResultToResponse => {
   const result: IResultToResponse = usersRepository.deleteUser(id);
