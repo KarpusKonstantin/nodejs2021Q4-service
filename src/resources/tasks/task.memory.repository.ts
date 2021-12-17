@@ -1,15 +1,16 @@
 import { StatusCodes } from 'http-status-codes';
-import Task from './task.model';
+import Task, { ITask } from './task.model';
+import IResultToResponse from '../../common/globalInterafaces';
 
-const tasks = [];
+const tasks: ITask[] = [];
 
-const getAllTaskByBoardId = async (boardId) => {
+const getAllTaskByBoardId = async (boardId: string): Promise<IResultToResponse> => {
   const result =  tasks.filter(item => item.boardId === boardId);
 
   return {code: 200, message: result};
 }
 
-const getTaskByBoardIdAndTaskId = async (boardId, taskId) => {
+const getTaskByBoardIdAndTaskId = async (boardId: string, taskId: string): Promise<IResultToResponse> => {
   const result =  tasks.filter(item => (item.boardId === boardId) && (item.id === taskId));
 
   if (result.length === 0) {
@@ -20,9 +21,9 @@ const getTaskByBoardIdAndTaskId = async (boardId, taskId) => {
   return {code: StatusCodes.OK, message: result[0]};
 };
 
-const createTask = async (boardId, taskData) => {
+const createTask = async (boardId: string, taskData: ITask): Promise<IResultToResponse> => {
   try {
-    const result = taskData;
+    const result: ITask = taskData;
     result.boardId = boardId;
 
     const task = new Task({...result});
@@ -31,11 +32,11 @@ const createTask = async (boardId, taskData) => {
     return {code: StatusCodes.CREATED, message: task.get()};
 
   } catch (e) {
-    return {code: StatusCodes.BAD_REQUEST, message: `Error create Task object: ${e.message}`};
+    return {code: StatusCodes.BAD_REQUEST, message: `Error create Task object`};
   }
 };
 
-const updateTask = async (boardId, taskId, taskData) => {
+const updateTask = async (boardId: string, taskId: string, taskData: ITask): Promise<IResultToResponse> => {
   const result =  tasks.filter(item => (item.boardId === boardId) && (item.id === taskId));
 
   if (result.length === 0) {
@@ -55,7 +56,7 @@ const updateTask = async (boardId, taskId, taskData) => {
 
 };
 
-const deleteTask = (boardId, taskId) => {
+const deleteTask = (boardId: string, taskId: string): IResultToResponse => {
   const result =  tasks.filter(item => (item.boardId === boardId) && (item.id === taskId));
 
   if (result.length === 0) {
@@ -73,7 +74,7 @@ const deleteTask = (boardId, taskId) => {
   return {code: StatusCodes.BAD_REQUEST, message: `Task id ${taskId} not found in DB`};
 };
 
-const deleteTasksByBorderId = (borderId) => {
+const deleteTasksByBorderId = (borderId: string): void => {
   for( let i = 0; i < tasks.length; i += 1){
 
     if (tasks[i].boardId === borderId) {
@@ -83,7 +84,7 @@ const deleteTasksByBorderId = (borderId) => {
   }
 }
 
-const setUserIdToNull = (userId) => {
+export const setUserIdToNull = (userId: string): void => {
   try {
     for (let i = 0; i < tasks.length; i += 1) {
       if (tasks[i].userId === userId) {

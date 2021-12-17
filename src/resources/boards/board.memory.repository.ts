@@ -25,7 +25,7 @@ const createBoard = async (boardData: IBoard): Promise<IResultToResponse> => {
     return {code: StatusCodes.CREATED, message: board.get()};
 
   } catch (e) {
-    return {code: StatusCodes.BAD_REQUEST, message: `Error create board object: ${e.message}`};
+    return {code: StatusCodes.BAD_REQUEST, message: `Error create board object`};
   }
 };
 

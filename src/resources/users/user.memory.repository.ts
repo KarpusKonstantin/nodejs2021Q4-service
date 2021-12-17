@@ -1,9 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
-import User from './user.model';
+import User, { IUser } from './user.model';
+import IResultToResponse from '../../common/globalInterafaces';
 
-const users = [];
+const users: IUser[] = [];
 
-const validateUserFields = (userData) => {
+const validateUserFields = (userData: IUser): IResultToResponse => {
   const result = {code: -1, message: ''}
 
   if (!userData.name || userData.name === '') {
@@ -14,16 +15,16 @@ const validateUserFields = (userData) => {
     return {code: StatusCodes.BAD_REQUEST, message: 'Field [login] is required. Please fill this field and try again'}
   }
 
-  if (!userData.password || userData.password === 0) {
+  if (!userData.password || userData.password === '') {
     return {code: StatusCodes.BAD_REQUEST, message: 'Field [password] is required. Please fill this field and try again'}
   }
 
   return result;
 }
 
-const getAllUsers = async () => ({code: 200, message: users});
+const getAllUsers = async (): Promise<IResultToResponse> => ({code: 200, message: users});
 
-const getUserById = async id => {
+const getUserById = async (id: string): Promise<IResultToResponse> => {
   const result =  users.filter(item => item.id === id);
 
   if (result.length === 0) {
@@ -34,7 +35,7 @@ const getUserById = async id => {
   return {code: StatusCodes.OK, message: result[0]};
 };
 
-const createUser = async (userData) => {
+const createUser = async (userData: IUser): Promise<IResultToResponse> => {
   const result = validateUserFields(userData);
 
   if (result.code !== -1) {
@@ -48,11 +49,11 @@ const createUser = async (userData) => {
     return {code: StatusCodes.CREATED, message: user.get()};
 
   } catch (e) {
-    return {code: StatusCodes.BAD_REQUEST, message: `Error create User object: ${e.message}`};
+    return {code: StatusCodes.BAD_REQUEST, message: `Error create User object`};
   }
 };
 
-const updateUser = async (id, userData) => {
+const updateUser = async (id: string, userData: IUser): Promise<IResultToResponse> => {
   const user = users.filter(item => item.id === id);
 
   if (user.length === 0) {
@@ -75,7 +76,7 @@ const updateUser = async (id, userData) => {
 
 };
 
-const deleteUser = (id) => {
+const deleteUser = (id: string): IResultToResponse => {
   const result =  users.filter(item => item.id === id);
 
   if (result.length === 0) {

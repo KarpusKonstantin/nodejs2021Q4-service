@@ -2,14 +2,16 @@ import { StatusCodes } from 'http-status-codes';
 
 import usersRepository from './user.memory.repository';
 import { setUserIdToNull } from '../tasks/task.memory.repository';
+import IResultToResponse from '../../common/globalInterafaces';
+import { IUser } from './user.model';
 
-const getAllUsers = () => usersRepository.getAllUsers();
-const getUserById =  (id) => usersRepository.getUserById(id);
-const createUser =  (userData) => usersRepository.createUser(userData);
-const updateUser =  (id, userData) =>  usersRepository.updateUser(id, userData);
+const getAllUsers = async (): Promise<IResultToResponse> => usersRepository.getAllUsers();
+const getUserById =  async (id: string): Promise<IResultToResponse> => usersRepository.getUserById(id);
+const createUser =  async (userData: IUser): Promise<IResultToResponse>=> usersRepository.createUser(userData);
+const updateUser =  async (id: string, userData: IUser): Promise<IResultToResponse> =>  usersRepository.updateUser(id, userData);
 
-const deleteUser = (id) => {
-  const result = usersRepository.deleteUser(id);
+const deleteUser = (id: string): IResultToResponse => {
+  const result: IResultToResponse = usersRepository.deleteUser(id);
 
   setUserIdToNull(id);
 

@@ -8,16 +8,12 @@ export interface IBoard {
 }
 
 
-class Board {
-  title: string;
-  id: string;
-  columns: Column[];
-
+class Board implements IBoard{
   constructor({
     id = uuidv4(),
     title = 'Default',
     columns = [new Column()]
-  } = {}) {
+  } = {} as IBoard) {
     this.id = id;
     this.title = title;
     this.columns = columns;
@@ -35,6 +31,10 @@ class Board {
     const { id, title, columns } = board;
     return { id, title, columns };
   }
+
+  columns: Column[];
+  id: string;
+  title: string;
 }
 
 export default Board;

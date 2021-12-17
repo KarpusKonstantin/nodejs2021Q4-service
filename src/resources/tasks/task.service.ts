@@ -1,12 +1,14 @@
 import { StatusCodes } from 'http-status-codes';
 import tasksRepository from './task.memory.repository';
+import IResultToResponse from '../../common/globalInterafaces';
+import { ITask } from './task.model';
 
-const getAllTaskByBoardId = (boardId) => tasksRepository.getAllTaskByBoardId(boardId);
-const getTaskByBoardIdAndTaskId =  (boardId, taskId) => tasksRepository.getTaskByBoardIdAndTaskId(boardId, taskId);
-const createTask =  (boardId, taskData) => tasksRepository.createTask(boardId, taskData);
-const updateTask =  (boardId, taskId, userData) =>  tasksRepository.updateTask(boardId, taskId, userData);
+const getAllTaskByBoardId = async (boardId: string): Promise<IResultToResponse> => tasksRepository.getAllTaskByBoardId(boardId);
+const getTaskByBoardIdAndTaskId = async (boardId: string, taskId: string): Promise<IResultToResponse> => tasksRepository.getTaskByBoardIdAndTaskId(boardId, taskId);
+const createTask =  async (boardId: string, taskData: ITask): Promise<IResultToResponse> => tasksRepository.createTask(boardId, taskData);
+const updateTask =  async (boardId: string, taskId: string, taskData: ITask): Promise<IResultToResponse> =>  tasksRepository.updateTask(boardId, taskId, taskData);
 
-const deleteUser = (boardId, taskId) => {
+const deleteUser = (boardId: string, taskId: string): IResultToResponse => {
   const result = tasksRepository.deleteTask(boardId, taskId);
 
   return { code: StatusCodes.OK, message: result.message }

@@ -1,15 +1,33 @@
 import { v4 as uuidv4 } from 'uuid';
 
-class Task {
+export interface ITask {
+  id: string;
+  title: string;
+  order: string;
+  description: string;
+  userId: string | null;
+  boardId: string | null;
+  columnId: string | null;
+}
+
+class Task implements ITask{
+  boardId: string | null;
+  columnId: string | null;
+  description: string;
+  id: string;
+  order: string;
+  title: string;
+  userId: string | null;
+
   constructor({
     id = uuidv4(),
     title = 'Default Title',
-    order,
+    order = '',
     description = 'Default Description',
     userId = null,
-    boardId,
+    boardId = null,
     columnId = null
-  } = {}) {
+  } = {} as ITask) {
     this.id = id;
     this.title = title;
     this.order = order;
@@ -19,7 +37,7 @@ class Task {
     this.columnId = columnId;
   }
 
-  get() {
+  get(): ITask {
     return {
       id: this.id,
       title: this.title,
@@ -31,7 +49,7 @@ class Task {
     };
   }
 
-  static toResponse(task) {
+  static toResponse(task: ITask) {
     const { id, title, order, description, userId, boardId, columnId } = task;
     return { id, title, order, description, userId, boardId, columnId };
   }
