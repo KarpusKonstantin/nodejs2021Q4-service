@@ -10,6 +10,9 @@ export interface ITask {
   columnId: string | null;
 }
 
+/**
+ * Model Task which implement interface ITask
+ */
 class Task implements ITask{
   boardId: string | null | undefined;
   columnId: string | null;
@@ -37,6 +40,10 @@ class Task implements ITask{
     this.columnId = columnId;
   }
 
+  /**
+   * Return instance
+   * @returns ITask
+   */
   get(): ITask {
     return {
       id: this.id,
@@ -49,7 +56,12 @@ class Task implements ITask{
     };
   }
 
-  static toResponse(task: ITask) {
+  /**
+   * Static method which return task object
+   * @param task - board data (IBoard)
+   * @returns ITask
+   */
+  static toResponse(task: ITask): ITask {
     const { id, title, order, description, userId, boardId, columnId } = task;
     return { id, title, order, description, userId, boardId, columnId };
   }
