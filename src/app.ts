@@ -3,6 +3,7 @@
 // const YAML = require('yamljs');
 
 import Koa from 'koa';
+import MyLogger from './logger'
 
 // const json = require('koa-json');
 
@@ -15,13 +16,21 @@ import taskRouter from './resources/tasks/task.router';
 
 const app: Koa = new Koa();
 
+const logger = new MyLogger(2, true, true);
+
+
 // app.use(json());
 
 // app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+
 app.use(async (ctx, next) => {
   await next();
   const rt = ctx.response.get('X-Response-Time');
-  console.log(`${ctx.method} ${ctx.url} ${ctx.response.status}- ${rt}`);
+
+  logger.logResult(ctx, rt);
+
+  // console.log(`${ctx.method} ${ctx.url} ${ctx.response.status} ${a} - ${rt}`);
 });
 
 // x-response-time
@@ -36,5 +45,6 @@ app.use(async (ctx, next) => {
 app.use(userRouter.routes()).use(userRouter.allowedMethods());
 app.use(boardRouter.routes()).use(boardRouter.allowedMethods());
 app.use(taskRouter.routes()).use(taskRouter.allowedMethods());
+
 
 export default app;
