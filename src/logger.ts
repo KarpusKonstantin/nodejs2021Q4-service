@@ -17,7 +17,7 @@ const  dateFormat = (date: Date): string => {
     // date.setSeconds(date.getSeconds() + date.getTimezoneOffset() * 60 + weatherPage.loadData.offset_sec);
 
     const monthNum = date.getMonth() + 1;
-    const dayNum = date.getDay();
+    // const dayNum = date.getDay();
     const day = date.getDate();
     const year = date.getFullYear();
 
