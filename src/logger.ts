@@ -44,8 +44,8 @@ export class MyLogger {
   saveErrorToFile: boolean;
   viewLogToConsole: boolean;
 
-  constructor(logLevel: number, viewLogToConsole: boolean, saveLogToFile: boolean, saveErrorToFile: boolean) {
-    this.logLevel = logLevel;
+  constructor(viewLogToConsole: boolean, saveLogToFile: boolean, saveErrorToFile: boolean) {
+    this.logLevel = Number(process.env.LOGGER_LEVEL) || 0;
     this.saveErrorToFile = saveErrorToFile;
     this.saveLogToFile = saveLogToFile;
     this.viewLogToConsole = viewLogToConsole;

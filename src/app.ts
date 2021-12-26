@@ -16,7 +16,7 @@ import taskRouter from './resources/tasks/task.router';
 
 const app: Koa = new Koa();
 
-const logger = new MyLogger(2, true, true, true);
+const logger = new MyLogger(true, true, true);
 
 
 // app.use(json());
