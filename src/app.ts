@@ -3,7 +3,7 @@
 // const YAML = require('yamljs');
 
 import Koa from 'koa';
-import { MyLogger } from './logger';
+import { IMessage, MyLogger } from './logger';
 
 // const json = require('koa-json');
 
@@ -26,14 +26,19 @@ const logger = new MyLogger(2, true, true, true);
 
 app.use(async (ctx, next) => {
   await next();
-  const rt = ctx.response.get('X-Response-Time');
 
-  logger.logResult(ctx, rt);
+  const message: IMessage = { status: ctx.status, executeTime: ctx.response.get('X-Response-Time')};
 
-  // console.log(`${ctx.method} ${ctx.url} ${ctx.response.status} ${a} - ${rt}`);
+  message.params = JSON.stringify(ctx.params);
+  message.body = JSON.stringify(ctx.body);
+  message.query = JSON.stringify(ctx.query);
+  message.method = ctx.request.method
+  message.url = ctx.request.url
+  message.message = ctx.response.message
+
+  logger.logResult(message);
 });
 
-// x-response-time
 
 app.use(async (ctx, next) => {
   const start = Date.now();
@@ -46,6 +51,31 @@ app.use(userRouter.routes()).use(userRouter.allowedMethods());
 app.use(boardRouter.routes()).use(boardRouter.allowedMethods());
 app.use(taskRouter.routes()).use(taskRouter.allowedMethods());
 
+const handleException = (err: Error) => {
+  const message: IMessage = { status: 500 };
+  message.message = `Uncaught Exception Error: ${err.message}`;
+
+  logger.logResult(message);
+
+  process.exit(1);
+};
+
+const handleRejectedPromise = (err: Error) => {
+  const message: IMessage = { status: 500 };
+  message.message = `Unhandled Rejection Error: ${err.message}`;
+
+  logger.logResult(message);
+
+  process.exit(1);
+};
+
+(() => {
+  process.on('uncaughtException', handleException);
+  process.on('unhandledRejection', handleRejectedPromise);
+})();
+
+// throw Error('Oops!');
+// Promise.reject(Error('Oops!'));
 
 
 export default app;

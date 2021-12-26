@@ -1,5 +1,15 @@
-import { Context } from 'koa';
 import fs from 'fs';
+
+export interface IMessage {
+  method?: string;
+  url?: string;
+  params?: string;
+  query?: string;
+  body?: string;
+  status: number;
+  message?: string;
+  executeTime?: string;
+}
 
 const  dateFormat = (date: Date): string => {
 
@@ -41,14 +51,42 @@ export class MyLogger {
     this.viewLogToConsole = viewLogToConsole;
   }
 
+  private logMessage(message: IMessage): string {
+    let result = `[${dateFormat(new Date())}] - `;
 
+    if (message.method && message.method !== '') {
+      result += `Method: ${message.method} `
+    }
 
-  private logMessage(ctx: Context, executeTime: string): string {
-    const params = JSON.stringify(ctx.params);
-    const body = JSON.stringify(ctx.body);
-    const query = JSON.stringify(ctx.query);
+    if (message.url && message.url !== '') {
+      result += `URL: ${message.url} `
+    }
 
-    return `[${dateFormat(new Date())}] - Method: ${ctx.request.method}, Url: ${ctx.request.url}, Params: ${params}, Query: ${query}, Body: ${body}, Status: ${ctx.response.status}, Message: ${ctx.response.message}, ExecTime: ${executeTime} \n`;
+    if (message.params && message.params !== '') {
+      result += `Params: ${message.params} `
+    }
+
+    if (message.query && message.query !== '') {
+      result += `Query: ${message.query} `
+    }
+
+    if (message.body && message.body !== '') {
+      result += `Body: ${message.body} `
+    }
+
+    if (message.status) {
+      result += `Status: ${message.status} `
+    }
+
+    if (message.message && message.message !== '') {
+      result += `Message: ${message.message} `
+    }
+
+    if (message.executeTime && message.executeTime !== '') {
+      result += `ExecuteTime: ${message.executeTime} `
+    }
+
+    return `${result  }\n`;
   }
 
   private saveToFile(fileName: string, log: string) {
@@ -59,18 +97,23 @@ export class MyLogger {
       })
   }
 
-  logResult(ctx: Context, executeTime: string) {
-    const log: string = this.logMessage(ctx, executeTime);
+  logResult(message: IMessage) {
+    const log: string = this.logMessage(message);
 
-    if (this.viewLogToConsole) {
-      console.log(log);
-    }
 
-    if ((this.saveLogToFile) && (ctx.status < 400)) {
+    if ((this.saveLogToFile) && (message.status < 400) && (this.logLevel > 0)) {
+      if (this.viewLogToConsole) {
+        console.log(log);
+      }
+
       this.saveToFile('logs.log', log)
     }
 
-    if ((this.saveErrorToFile) && (ctx.status > 399)) {
+    if ((this.saveErrorToFile) && (message.status > 399)) {
+      if (this.viewLogToConsole) {
+        console.log(log);
+      }
+
       this.saveToFile('error.log', log)
     }
   }
