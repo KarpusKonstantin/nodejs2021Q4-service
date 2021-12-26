@@ -47,6 +47,8 @@ module.exports = {
     'tsdoc/syntax': 'error',
     '@typescript-eslint/no-explicit-any': ['error'],
     'lines-between-class-members': 'off',
+    'class-methods-use-this': 'off'
+
     // 'import/no-import-module-exports': 'off'
   },
 };
