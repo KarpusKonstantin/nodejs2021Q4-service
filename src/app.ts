@@ -3,7 +3,7 @@
 // const YAML = require('yamljs');
 
 import Koa from 'koa';
-import MyLogger from './logger'
+import { MyLogger } from './logger';
 
 // const json = require('koa-json');
 
@@ -16,7 +16,7 @@ import taskRouter from './resources/tasks/task.router';
 
 const app: Koa = new Koa();
 
-const logger = new MyLogger(2, true, true);
+const logger = new MyLogger(2, true, true, true);
 
 
 // app.use(json());
@@ -45,6 +45,7 @@ app.use(async (ctx, next) => {
 app.use(userRouter.routes()).use(userRouter.allowedMethods());
 app.use(boardRouter.routes()).use(boardRouter.allowedMethods());
 app.use(taskRouter.routes()).use(taskRouter.allowedMethods());
+
 
 
 export default app;
