@@ -1,0 +1,7 @@
+.idea
+.github
+node_modules
+Dockerfile
+.git
+error.log
+logs.log

@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "target": "ES2016",
+        "module": "commonjs",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        "esModuleInterop": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ]
+    }
+}
