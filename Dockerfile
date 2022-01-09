@@ -1,13 +1,13 @@
 FROM node:16-alpine
 
-WORKDIR /src
+WORKDIR /rs-app
 
-COPY package.json /src
+COPY package.json /rs-app
 
 RUN npm install
 
 COPY . .
 
-EXPOSE 4000
+EXPOSE ${PORT}
 
 CMD ["npm", "start"]
