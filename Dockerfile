@@ -4,7 +4,7 @@ WORKDIR /rs-app
 
 COPY package.json /rs-app
 
-RUN npm install
+RUN npm install --production
 
 COPY . .
 

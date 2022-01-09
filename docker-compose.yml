@@ -7,6 +7,7 @@ volumes:
 services:
   notes:
     build: .
+    image: kostik1986/rs-app-node
     ports:
       - ${PORT}:${PORT}
     environment:
@@ -15,13 +16,14 @@ services:
     depends_on:
       - postgres
     volumes:
-      - logs:/app/logs
-      - ./:/app
+      - logs:/rs-app/logs
+      - ./:/rs-app
     networks:
       - network
 
   postgres:
     build: ./postgersdb
+    image: kostik1986/rs-app-postgres
     restart: always
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
