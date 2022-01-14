@@ -5,7 +5,22 @@ volumes:
   logs:
 
 services:
-  notes:
+  postgres:
+    build: ./postgersdb
+    image: kostik1986/rs-app-postgres
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - network
+
+  nodes:
     build: .
     image: kostik1986/rs-app-node
     ports:
@@ -21,20 +36,6 @@ services:
     networks:
       - network
 
-  postgres:
-    build: ./postgersdb
-    image: kostik1986/rs-app-postgres
-    restart: always
-    ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - db:/var/lib
-    networks:
-      - network
 networks:
   network:
     driver: bridge
