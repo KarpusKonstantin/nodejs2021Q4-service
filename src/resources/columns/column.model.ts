@@ -6,7 +6,7 @@ export interface IColumn {
   order: string
 }
 
-class Column {
+class ColumnBoard {
   id: string;
   title: string;
   order: string;
@@ -26,4 +26,4 @@ class Column {
   }
 }
 
-export default Column;
+export default ColumnBoard;

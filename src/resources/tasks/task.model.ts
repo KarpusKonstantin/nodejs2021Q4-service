@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 export interface ITask {
   id: string;
@@ -13,13 +14,28 @@ export interface ITask {
 /**
  * Model Task which implement interface ITask
  */
+
+@Entity('task')
 class Task implements ITask{
-  boardId: string | null | undefined;
-  columnId: string | null;
-  description: string;
+  @PrimaryColumn()
   id: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  boardId: string | null | undefined;
+
+  @Column({ type: 'varchar', nullable: true })
+  columnId: string | null;
+
+  @Column()
+  description: string;
+
+  @Column()
   order: string;
+
+  @Column()
   title: string;
+
+  @Column({ type: 'varchar', nullable: true })
   userId: string | null;
 
   constructor({

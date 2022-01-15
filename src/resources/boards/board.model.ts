@@ -1,25 +1,33 @@
 import { v4 as uuidv4 } from 'uuid';
-import Column from '../columns/column.model';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
+import ColumnBoard from '../columns/column.model';
 
 export interface IBoard {
   id: string,
   title: string,
-  columns: Column[]
+  columns: ColumnBoard[]
 }
 
 
 /**
  * Model board which implement interface IBoard
  */
+
+@Entity('board')
 class Board implements IBoard{
-  columns: Column[];
+  @PrimaryColumn()
   id: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  columns: ColumnBoard[];
+
+  @Column()
   title: string;
 
   constructor({
     id = uuidv4(),
     title = 'Default',
-    columns = [new Column()]
+    columns = [new ColumnBoard()]
   } = {} as IBoard) {
     this.id = id;
     this.title = title;

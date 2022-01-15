@@ -3,6 +3,7 @@
 // const YAML = require('yamljs');
 
 import Koa from 'koa';
+import { createConnection } from "typeorm";
 import { IMessage, MyLogger } from './logger';
 
 // const json = require('koa-json');
@@ -11,6 +12,20 @@ import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
 
+createConnection({
+  type: 'postgres',
+  host: 'postgres',
+  port: 5432,
+  username: 'admin',
+  password: '123456',
+  database: 'rsschool-service-db',
+  synchronize: true,
+  entities: ['src/resources/tasks/task.model.ts', 'src/resources/boards/board.model.ts'],
+})
+  .then(() => {
+  console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAA');
+})
+  .catch(error => console.log(error));
 
 // const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
