@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 export interface IColumn {
   id: string,
@@ -6,9 +7,15 @@ export interface IColumn {
   order: string
 }
 
+@Entity('column')
 class ColumnBoard {
+  @PrimaryColumn()
   id: string;
+
+  @Column()
   title: string;
+
+  @Column()
   order: string;
 
   constructor({ id = uuidv4(), title = '', order = '' } = {}) {
