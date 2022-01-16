@@ -18,28 +18,23 @@ router.get('/boards/:id', async (ctx) => {
 });
 
 router.post('/boards', async (ctx) => {
-  ctx.req.on('data', async (data) => {
-    const jsonData = JSON.parse(data);
-    const user = boardsService.createBoard(jsonData);
+  const { body } = ctx.request;
+  const board = await boardsService.createBoard(body);
 
-    ctx.status = user.code;
-    ctx.body = user.message;
-
-  });
+  ctx.status = board.code;
+  ctx.body = board.message;
 });
 
 router.put('/boards/:id', async (ctx) => {
-  ctx.req.on('data', async (data) => {
-    const jsonData = JSON.parse(data);
-    const user = boardsService.updateBoard(ctx.params.id, jsonData);
+  const { body } = ctx.request;
+  const board = await boardsService.updateBoard(ctx.params.id, body);
 
-    ctx.status = user.code;
-    ctx.body = user.message;
-  });
+  ctx.status = board.code;
+  ctx.body = board.message;
 })
 
 router.delete('/boards/:id', async (ctx) => {
-  const result = boardsService.deleteBoard(ctx.params.id);
+  const result = await boardsService.deleteBoard(ctx.params.id);
 
   ctx.status = result.code;
   ctx.body = result.message;

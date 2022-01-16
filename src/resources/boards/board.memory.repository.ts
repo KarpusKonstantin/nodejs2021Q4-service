@@ -1,29 +1,35 @@
 import { StatusCodes } from 'http-status-codes';
 import Board, { IBoard } from './board.model';
 import IResultToResponse from '../../common/globalInterafaces';
+import { getRepository } from 'typeorm';
 
-const boards: IBoard[] = [];
+// const boards: IBoard[] = [];
 
 /**
  * Returns all board list
  * @returns IResultToResponse - code = http status code (type is number) and message = board list
  */
-const getAllBoards = (): IResultToResponse => ({code: 200, message: boards});
+const getAllBoards = async (): Promise<IResultToResponse> =>{
+  const boards = await getRepository(Board).find();
+
+  return {code: 200, message: boards};
+
+};
 
 /**
  * Returns board by ID
  * @param id - Board ID
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
  */
-const getBoardById = (id: string): IResultToResponse => {
-  const result: IBoard[] =  boards.filter(item => item.id === id);
+const getBoardById = async (id: string): Promise<IResultToResponse> => {
+  const result = await getRepository(Board).findOne(id);
 
-  if (result.length === 0) {
+  if (result === undefined) {
     return {code: StatusCodes.NOT_FOUND, message: `Person id =  ${id} not found in DB`};
 
   }
 
-  return {code: StatusCodes.OK, message: result[0]};
+  return {code: StatusCodes.OK, message: result};
 };
 
 /**
@@ -31,12 +37,11 @@ const getBoardById = (id: string): IResultToResponse => {
  * @param boardData - board data (IBoard)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
  */
-const createBoard = (boardData: IBoard): IResultToResponse => {
+const createBoard = async (boardData: IBoard): Promise<IResultToResponse> => {
   try {
-    const board = new Board({...boardData});
-    boards.push(board.get());
+    const insertResult = await getRepository(Board).insert(boardData);
 
-    return {code: StatusCodes.CREATED, message: board.get()};
+    return {code: StatusCodes.CREATED, message: insertResult.raw[0]};
 
   } catch (e) {
     return {code: StatusCodes.BAD_REQUEST, message: `Error create board object`};
@@ -49,19 +54,16 @@ const createBoard = (boardData: IBoard): IResultToResponse => {
  * @param boardData - board data (IBoard)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
  */
-const updateBoard = (id: string, boardData: IBoard): IResultToResponse => {
-  const board = boards.filter(item => item.id === id);
+const updateBoard = async (id: string, boardData: IBoard): Promise<IResultToResponse> => {
+  const board =  await getRepository(Board).findOne(id);
 
-  if (board.length === 0) {
+  if (board === undefined) {
     return {code: StatusCodes.NOT_FOUND, message: `Board id = ${id} not found in DB`};
   }
 
-  const index = boards.indexOf(board[0]);
+  const updatedBoard = await getRepository(Board).update(id, boardData);
 
-  boards[index].title = boardData.title;
-  boards[index].columns = boardData.columns;
-
-  return {code: StatusCodes.OK, message: Board.toResponse(boards[index])};
+  return {code: StatusCodes.OK, message: updatedBoard.raw[0]};
 
 };
 
@@ -70,22 +72,16 @@ const updateBoard = (id: string, boardData: IBoard): IResultToResponse => {
  * @param id - board id
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
  */
-const deleteBoard = (id: string): IResultToResponse => {
-  const result =  boards.filter(item => item.id === id);
+const deleteBoard = async (id: string): Promise<IResultToResponse> => {
+  const result =  getRepository(Board).findOne(id);
 
-  if (result.length === 0) {
+  if (result === undefined) {
     return {code: StatusCodes.BAD_REQUEST, message: `Board id ${id} not found in DB`};
   }
 
-  const index = boards.indexOf(result[0]);
+  await getRepository(Board).delete(id);
 
-  if (index > -1) {
-    boards.splice(index, 1);
-
-    return {code: StatusCodes.NO_CONTENT, message: `Board id ${id} was deleted successfully`};
-  }
-
-  return {code: StatusCodes.BAD_REQUEST, message: `Board id ${id} not found in DB`};
+  return {code: StatusCodes.NO_CONTENT, message: `Board id ${id} was deleted successfully`};
 };
 
 export default {
