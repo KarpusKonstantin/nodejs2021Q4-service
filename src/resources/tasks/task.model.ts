@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, } from 'typeorm';
+// import User from '../users/user.model';
+// import Board from '../boards/board.model';
 
 export interface ITask {
   id: string;
@@ -38,6 +40,14 @@ class Task implements ITask{
 
   @Column({ type: 'varchar', nullable: true })
   userId: string | null;
+
+  // @ManyToOne(() => User, (user) => user.tasks)
+  // @JoinColumn({ name: 'userId' })
+  // user!: User;
+
+  // @ManyToOne(() => Board, (board) => board.tasks)
+  // @JoinColumn({ name: 'boardId' })
+  // board!: Board;
 
   constructor({
     id = uuidv4(),

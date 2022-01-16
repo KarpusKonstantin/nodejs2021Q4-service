@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+// import Task from '../tasks/task.model';
 
 
 export interface IUser {
@@ -28,6 +29,9 @@ class User implements IUser {
   @Column()
   password: string;
 
+  // @OneToMany(() => Task, (task) => task.user)
+  // tasks?: Task[];
+
   constructor({
     id = uuidv4(),
     name = 'USER',
@@ -39,6 +43,7 @@ class User implements IUser {
     this.login = login;
     this.password = password;
   }
+
 
   /**
    * Return instance

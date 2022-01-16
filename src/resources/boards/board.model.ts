@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+// import Task from '../tasks/task.model';
 
 export interface IBoard {
   id: string,
@@ -23,6 +24,9 @@ class Board implements IBoard{
 
   @Column()
   title: string;
+
+  // @OneToMany(() => Task, (task) => task.board)
+  // tasks!: Task[];
 
   constructor({
     id = uuidv4(),
