@@ -8,7 +8,7 @@ import { ITask } from './task.model';
  * @param boardId - board ID
  * @returns IResultToResponse - code = http status code (type is number) and message = task list (ITask[])
  */
-const getAllTaskByBoardId = (boardId: string): IResultToResponse => tasksRepository.getAllTaskByBoardId(boardId);
+const getAllTaskByBoardId = (boardId: string): Promise<IResultToResponse> => tasksRepository.getAllTaskByBoardId(boardId);
 
 /**
  * Returns tasks by ID and related to board (borderID)
@@ -16,7 +16,7 @@ const getAllTaskByBoardId = (boardId: string): IResultToResponse => tasksReposit
  * @param taskId - task ID
  * @returns IResultToResponse - code = http status code (type is number) and message = string or ITask
  */
-const getTaskByBoardIdAndTaskId = (boardId: string, taskId: string): IResultToResponse => tasksRepository.getTaskByBoardIdAndTaskId(boardId, taskId);
+const getTaskByBoardIdAndTaskId = (boardId: string, taskId: string): Promise<IResultToResponse> => tasksRepository.getTaskByBoardIdAndTaskId(boardId, taskId);
 
 /**
  * Create task related to board (borderID)
@@ -24,7 +24,7 @@ const getTaskByBoardIdAndTaskId = (boardId: string, taskId: string): IResultToRe
  * @param taskData - task data (ITask)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or ITask
  */
-const createTask =  (boardId: string | null | undefined, taskData: ITask): IResultToResponse => tasksRepository.createTask(boardId, taskData);
+const createTask =  (boardId: string | null | undefined, taskData: ITask): Promise<IResultToResponse> => tasksRepository.createTask(boardId, taskData);
 
 /**
  * Update task related to board (borderID)
@@ -33,7 +33,7 @@ const createTask =  (boardId: string | null | undefined, taskData: ITask): IResu
  * @param taskData - task data (ITask)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or ITask
  */
-const updateTask =  (boardId: string, taskId: string, taskData: ITask): IResultToResponse =>  tasksRepository.updateTask(boardId, taskId, taskData);
+const updateTask =  (boardId: string, taskId: string, taskData: ITask): Promise<IResultToResponse> =>  tasksRepository.updateTask(boardId, taskId, taskData);
 
 /**
  * Delete task related to board (borderID)
@@ -41,8 +41,8 @@ const updateTask =  (boardId: string, taskId: string, taskData: ITask): IResultT
  * @param taskId - task ID
  * @returns IResultToResponse - code = http status code (type is number) and message = string
  */
-const deleteTask = (boardId: string, taskId: string): IResultToResponse => {
-  const result = tasksRepository.deleteTask(boardId, taskId);
+const deleteTask = async (boardId: string, taskId: string): Promise<IResultToResponse> => {
+  const result = await tasksRepository.deleteTask(boardId, taskId);
 
   return { code: StatusCodes.OK, message: result.message }
 }

@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 export interface ITask {
   id: string;
   title: string;
-  order: string;
+  order: number;
   description: string;
   userId: string | null;
   boardId: string | null | undefined;
@@ -18,6 +18,7 @@ export interface ITask {
 @Entity('task')
 class Task implements ITask{
   @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', nullable: true })
@@ -29,8 +30,8 @@ class Task implements ITask{
   @Column()
   description: string;
 
-  @Column()
-  order: string;
+  @Column({ type: 'int', default: 0})
+  order: number;
 
   @Column()
   title: string;
@@ -41,7 +42,7 @@ class Task implements ITask{
   constructor({
     id = uuidv4(),
     title = 'Default Title',
-    order = '',
+    order = 0,
     description = 'Default Description',
     userId = null,
     boardId = null,

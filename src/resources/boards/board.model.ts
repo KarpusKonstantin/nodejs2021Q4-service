@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Entity, Column, PrimaryColumn } from 'typeorm';
-import ColumnBoard from '../columns/column.model';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 export interface IBoard {
   id: string,
   title: string,
-  columns: ColumnBoard[]
+  columns: string
 }
 
 
@@ -16,10 +15,11 @@ export interface IBoard {
 @Entity('board')
 class Board implements IBoard{
   @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  columns: ColumnBoard[];
+  @Column( 'json', {nullable: true })
+  columns: string;
 
   @Column()
   title: string;
@@ -27,7 +27,7 @@ class Board implements IBoard{
   constructor({
     id = uuidv4(),
     title = 'Default',
-    columns = [new ColumnBoard()]
+    columns = ''
   } = {} as IBoard) {
     this.id = id;
     this.title = title;

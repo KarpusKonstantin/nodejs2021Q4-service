@@ -70,8 +70,14 @@ const createUser = async (userData: IUser): Promise<IResultToResponse> => {
 
   try {
     const insertResult = await getRepository(User).insert(userData);
+    const user = await getRepository(User).findOne(insertResult.identifiers[0].id);
 
-    return {code: StatusCodes.CREATED, message: insertResult.raw[0]};
+    if (user !== undefined) {
+      return { code: StatusCodes.CREATED, message: User.toResponse(user) };
+    }
+
+    return {code: StatusCodes.BAD_REQUEST, message: `Error create User object`};
+
 
   } catch (e) {
     return {code: StatusCodes.BAD_REQUEST, message: `Error create User object`};
@@ -97,10 +103,14 @@ const updateUser = async (id: string, userData: IUser): Promise<IResultToRespons
     return result;
   }
 
-  const updatedUser = await getRepository(User).update(id, userData);
+  await getRepository(User).update(id, userData);
+  const usr = await getRepository(User).findOne(id);
 
-  return {code: StatusCodes.OK, message: updatedUser.raw[0]};
+  if (usr !== undefined) {
+    return {code: StatusCodes.OK, message: User.toResponse(usr)};
+  }
 
+  return {code: StatusCodes.BAD_REQUEST, message: `Error update User object`};
 };
 
 /**

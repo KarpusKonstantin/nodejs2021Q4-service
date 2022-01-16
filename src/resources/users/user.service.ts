@@ -45,7 +45,7 @@ const updateUser =  (id: string, userData: IUser): Promise<IResultToResponse> =>
 const deleteUser = async (id: string): Promise<IResultToResponse> => {
   const result: IResultToResponse = await usersRepository.deleteUser(id);
 
-  // setUserIdToNull(id);
+  await setUserIdToNull(id);
 
   return { code: StatusCodes.OK, message: result.message }
 }

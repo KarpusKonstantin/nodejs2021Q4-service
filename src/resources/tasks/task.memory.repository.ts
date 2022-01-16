@@ -1,16 +1,16 @@
 import { StatusCodes } from 'http-status-codes';
+import { getRepository } from 'typeorm';
 import Task, { ITask } from './task.model';
 import IResultToResponse from '../../common/globalInterafaces';
 
-const tasks: ITask[] = [];
 
 /**
  * Returns all tasks related to board (borderId)
  * @param boardId - board ID
  * @returns IResultToResponse - code = http status code (type is number) and message = task list (ITask[])
  */
-const getAllTaskByBoardId = (boardId: string): IResultToResponse => {
-  const result =  tasks.filter(item => item.boardId === boardId);
+const getAllTaskByBoardId = async (boardId: string): Promise<IResultToResponse> => {
+  const result = await getRepository(Task).find({ where: { boardId} });
 
   return {code: 200, message: result};
 }
@@ -21,14 +21,14 @@ const getAllTaskByBoardId = (boardId: string): IResultToResponse => {
  * @param taskId - task ID
  * @returns IResultToResponse - code = http status code (type is number) and message = string or ITask
  */
-const getTaskByBoardIdAndTaskId = (boardId: string, taskId: string): IResultToResponse => {
-  const result =  tasks.filter(item => (item.boardId === boardId) && (item.id === taskId));
+const getTaskByBoardIdAndTaskId = async (boardId: string, taskId: string): Promise<IResultToResponse> => {
+  const result = await getRepository(Task).findOne({ where: { id: taskId, boardId} });
 
-  if (result.length === 0) {
+  if (result === undefined) {
     return {code: StatusCodes.NOT_FOUND, message: `Task id, boardId =  ${taskId},${boardId} not found in DB`};
   }
 
-  return {code: StatusCodes.OK, message: result[0]};
+  return {code: StatusCodes.OK, message: result};
 };
 
 /**
@@ -37,7 +37,7 @@ const getTaskByBoardIdAndTaskId = (boardId: string, taskId: string): IResultToRe
  * @param taskData - task data (ITask)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or ITask
  */
-const createTask = (boardId: string | null | undefined, taskData: ITask): IResultToResponse => {
+const createTask = async (boardId: string | null | undefined, taskData: ITask): Promise<IResultToResponse> => {
   try {
     const result: ITask = taskData;
 
@@ -47,10 +47,14 @@ const createTask = (boardId: string | null | undefined, taskData: ITask): IResul
       result.boardId = boardId;
     }
 
-    const task = new Task({...result});
-    tasks.push(task.get());
+    const insertResult = await getRepository(Task).insert(result);
+    const user = await getRepository(Task).findOne(insertResult.identifiers[0].id);
 
-    return {code: StatusCodes.CREATED, message: task.get()};
+    if (user !== undefined) {
+      return { code: StatusCodes.CREATED, message: user };
+    }
+
+    return {code: StatusCodes.BAD_REQUEST, message: `Error create Task object`};
 
   } catch (e) {
     return {code: StatusCodes.BAD_REQUEST, message: `Error create Task object`};
@@ -64,23 +68,21 @@ const createTask = (boardId: string | null | undefined, taskData: ITask): IResul
  * @param taskData - task data (ITask)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or ITask
  */
-const updateTask = (boardId: string, taskId: string, taskData: ITask): IResultToResponse => {
-  const result =  tasks.filter(item => (item.boardId === boardId) && (item.id === taskId));
+const updateTask = async (boardId: string, taskId: string, taskData: ITask): Promise<IResultToResponse> => {
+  const result = await getRepository(Task).find({ where: { id: taskId, boardId} });
 
-  if (result.length === 0) {
+  if (result === undefined) {
     return {code: StatusCodes.NOT_FOUND, message: `Task id, boardId =  ${taskId},${boardId} not found in DB`};
   }
 
-  const index = tasks.indexOf(result[0]);
+  await getRepository(Task).update({ id: taskId, boardId}, taskData);
+  const usr = await getRepository(Task).find({ where: { id: taskId, boardId} });
 
-  tasks[index].title = taskData.title;
-  tasks[index].order = taskData.order;
-  tasks[index].description = taskData.description;
-  tasks[index].userId = taskData.userId;
-  tasks[index].boardId = taskData.boardId;
-  tasks[index].columnId = taskData.columnId;
+  if (usr !== undefined) {
+    return { code: StatusCodes.OK, message: usr };
+  }
 
-  return {code: StatusCodes.OK, message: Task.toResponse(tasks[index])};
+  return {code: StatusCodes.BAD_REQUEST, message: `Error update Task object`};
 
 };
 
@@ -90,49 +92,33 @@ const updateTask = (boardId: string, taskId: string, taskData: ITask): IResultTo
  * @param taskId - task ID
  * @returns IResultToResponse - code = http status code (type is number) and message = string
  */
-const deleteTask = (boardId: string, taskId: string): IResultToResponse => {
-  const result =  tasks.filter(item => (item.boardId === boardId) && (item.id === taskId));
+const deleteTask = async (boardId: string, taskId: string): Promise<IResultToResponse> => {
+  const result = await getRepository(Task).find({ where: { id: taskId, boardId} });
 
-  if (result.length === 0) {
+  if (result === undefined) {
     return {code: StatusCodes.NOT_FOUND, message: `Task id, boardId =  ${taskId},${boardId} not found in DB`};
   }
 
-  const index = tasks.indexOf(result[0]);
+  await getRepository(Task).delete({ id: taskId, boardId});
 
-  if (index > -1) {
-    tasks.splice(index, 1);
-
-    return {code: StatusCodes.NO_CONTENT, message: `Task id ${taskId} was deleted successfully`};
-  }
-
-  return {code: StatusCodes.BAD_REQUEST, message: `Task id ${taskId} not found in DB`};
+  return {code: StatusCodes.NO_CONTENT, message: `Task id ${taskId} was deleted successfully`};
 };
 
 /**
  * Delete all tasks if board was deleted
  * @param boardId - board ID
  */
-export const deleteTasksByBorderId = (boardId: string): void => {
-  for( let i = 0; i < tasks.length; i += 1){
-
-    if (tasks[i].boardId === boardId) {
-      tasks.splice(i, 1);
-      i -= 1;
-    }
-  }
+export const deleteTasksByBorderId = async (boardId: string): Promise<void> => {
+  await getRepository(Task).delete({ boardId });
 }
 
 /**
  * UserId set to null if UserId was deleted
  * @param userId - user ID
  */
-export const setUserIdToNull = (userId: string) => {
+export const setUserIdToNull = async (userId: string) => {
   try {
-    for (let i = 0; i < tasks.length; i += 1) {
-      if (tasks[i].userId === userId) {
-        tasks[i].userId = null;
-      }
-    }
+    await getRepository(Task).update({ userId }, { userId: null});
 
   } catch (e) {
     // console.error(e);

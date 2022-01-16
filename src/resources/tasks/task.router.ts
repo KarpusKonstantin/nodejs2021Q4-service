@@ -19,28 +19,23 @@ router.get('/boards/:boardId/tasks/:id', async (ctx) => {
 });
 
 router.post('/boards/:boardId/tasks', async (ctx) => {
-  ctx.req.on('data', async (data) => {
-    const jsonData = JSON.parse(data);
-    const user = tasksService.createTask(ctx.params.boardId, jsonData);
+  const { body } = ctx.request;
+  const task = await tasksService.createTask(ctx.params.boardId, body);
 
-    ctx.status = user.code;
-    ctx.body = user.message;
-
-  });
+  ctx.status = task.code;
+  ctx.body = task.message;
 });
 
 router.put('/boards/:boardId/tasks/:id', async (ctx) => {
-  ctx.req.on('data', async (data) => {
-    const jsonData = JSON.parse(data);
-    const user = tasksService.updateTask(ctx.params.boardId, ctx.params.id, jsonData);
+  const { body } = ctx.request;
+  const task = await tasksService.updateTask(ctx.params.boardId, ctx.params.id, body);
 
-    ctx.status = user.code;
-    ctx.body = user.message;
-  });
+  ctx.status = task.code;
+  ctx.body = task.message;
 })
 
 router.delete('/boards/:boardId/tasks/:id', async (ctx) => {
-  const result = tasksService.deleteUser(ctx.params.boardId, ctx.params.id);
+  const result = await tasksService.deleteUser(ctx.params.boardId, ctx.params.id);
 
   ctx.status = result.code;
   ctx.body = result.message;

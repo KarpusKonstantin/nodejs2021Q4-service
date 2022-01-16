@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
+import { getRepository } from 'typeorm';
 import Board, { IBoard } from './board.model';
 import IResultToResponse from '../../common/globalInterafaces';
-import { getRepository } from 'typeorm';
 
 // const boards: IBoard[] = [];
 
@@ -41,7 +41,13 @@ const createBoard = async (boardData: IBoard): Promise<IResultToResponse> => {
   try {
     const insertResult = await getRepository(Board).insert(boardData);
 
-    return {code: StatusCodes.CREATED, message: insertResult.raw[0]};
+    const board = await getRepository(Board).findOne(insertResult.identifiers[0].id);
+
+    if (board !== undefined) {
+      return {code: StatusCodes.CREATED, message: board};
+    }
+
+    return {code: StatusCodes.BAD_REQUEST, message: `Error create Board object`};
 
   } catch (e) {
     return {code: StatusCodes.BAD_REQUEST, message: `Error create board object`};
@@ -61,10 +67,14 @@ const updateBoard = async (id: string, boardData: IBoard): Promise<IResultToResp
     return {code: StatusCodes.NOT_FOUND, message: `Board id = ${id} not found in DB`};
   }
 
-  const updatedBoard = await getRepository(Board).update(id, boardData);
+  await getRepository(Board).update(id, boardData);
+  const result = await getRepository(Board).findOne(id);
 
-  return {code: StatusCodes.OK, message: updatedBoard.raw[0]};
+  if (result !== undefined) {
+    return { code: StatusCodes.OK, message: result };
+  }
 
+  return {code: StatusCodes.BAD_REQUEST, message: `Error update Board object`};
 };
 
 /**
