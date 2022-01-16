@@ -1,4 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
+
 
 export interface IUser {
   id?: string;
@@ -10,10 +12,19 @@ export interface IUser {
 /**
  * User model which implement interface IUser
  */
+
+@Entity('user')
 class User implements IUser{
+  @PrimaryColumn()
   id: string;
+
+  @Column()
   login: string;
+
+  @Column()
   name: string;
+
+  @Column()
   password: string;
 
   constructor({
