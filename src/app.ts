@@ -3,9 +3,10 @@
 // const YAML = require('yamljs');
 
 import Koa from 'koa';
+import bodyParser = require("koa-bodyparser");
+
 import { createConnection } from "typeorm";
 import { IMessage, MyLogger } from './logger';
-
 // const json = require('koa-json');
 
 import userRouter from './resources/users/user.router';
@@ -14,13 +15,15 @@ import taskRouter from './resources/tasks/task.router';
 
 createConnection()
   .then(() => {
-  console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAA');
+  console.log('PostgresSQL is running!');
 })
   .catch(error => console.log(error));
 
 // const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 const app: Koa = new Koa();
+
+app.use(bodyParser());
 
 const logger = new MyLogger(true, true, true);
 

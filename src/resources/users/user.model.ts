@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 
 export interface IUser {
@@ -14,8 +14,9 @@ export interface IUser {
  */
 
 @Entity('user')
-class User implements IUser{
+class User implements IUser {
   @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()

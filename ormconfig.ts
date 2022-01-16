@@ -18,7 +18,12 @@ const config: ConnectionOptions = {
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
-  entities: ['src/resources/tasks/task.model.ts', 'src/resources/boards/board.model.ts'],
+  entities: [
+    'src/resources/tasks/task.model.ts',
+    'src/resources/boards/board.model.ts',
+    'src/resources/columns/column.model.ts',
+    'src/resources/users/user.model.ts'
+  ],
 
   synchronize: false,
 
@@ -26,7 +31,7 @@ const config: ConnectionOptions = {
   logging: true,
   logger: 'file',
 
-  migrations: ['/migrations/**/*{.ts,.js}'],
+  migrations: ['src/migrations/*{.ts,.js}'],
   cli: {
     migrationsDir: 'src/migrations',
   },

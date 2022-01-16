@@ -6,7 +6,7 @@ volumes:
 
 services:
   postgres:
-    build: ./postgersdb
+    build: ./postgresdb
     image: kostik1986/rs-app-postgres
     restart: always
     ports:

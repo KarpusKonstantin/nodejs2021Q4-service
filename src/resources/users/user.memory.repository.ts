@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
+import { getRepository } from 'typeorm';
 import User, { IUser } from './user.model';
 import IResultToResponse from '../../common/globalInterafaces';
 
-const users: IUser[] = [];
+// const users: IUser[] = [];
 
 /**
  * Check validate User Data
@@ -32,7 +33,11 @@ const validateUserFields = (userData: IUser): IResultToResponse => {
  * Returns all user list
  * @returns IResultToResponse - code = http status code (type is number) and message = user array
  */
-const getAllUsers = (): IResultToResponse => ({code: 200, message: users});
+const getAllUsers = async (): Promise<IResultToResponse> => {
+  const users = await getRepository(User).find();
+
+  return {code: 200, message: users};
+};
 
 
 /**
@@ -40,15 +45,15 @@ const getAllUsers = (): IResultToResponse => ({code: 200, message: users});
  * @param id - user ID
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
-const getUserById = (id: string): IResultToResponse => {
-  const result =  users.filter(item => item.id === id);
+const getUserById = async (id: string): Promise<IResultToResponse> => {
+  const result = await getRepository(User).findOne(id);
 
-  if (result.length === 0) {
+  if (result === undefined) {
     return {code: StatusCodes.NOT_FOUND, message: `User id =  ${id} not found in DB`};
 
   }
 
-  return {code: StatusCodes.OK, message: result[0]};
+  return {code: StatusCodes.OK, message: result};
 };
 
 /**
@@ -56,7 +61,7 @@ const getUserById = (id: string): IResultToResponse => {
  * @param userData - user data (IUser)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
-const createUser = (userData: IUser): IResultToResponse => {
+const createUser = async (userData: IUser): Promise<IResultToResponse> => {
   const result = validateUserFields(userData);
 
   if (result.code !== -1) {
@@ -64,10 +69,9 @@ const createUser = (userData: IUser): IResultToResponse => {
   }
 
   try {
-    const user = new User({...userData});
-    users.push(user.get());
+    const insertResult = await getRepository(User).insert(userData);
 
-    return {code: StatusCodes.CREATED, message: user.get()};
+    return {code: StatusCodes.CREATED, message: insertResult.raw[0]};
 
   } catch (e) {
     return {code: StatusCodes.BAD_REQUEST, message: `Error create User object`};
@@ -80,10 +84,10 @@ const createUser = (userData: IUser): IResultToResponse => {
  * @param userData - user data (IUser)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
-const updateUser = (id: string, userData: IUser): IResultToResponse => {
-  const user = users.filter(item => item.id === id);
+const updateUser = async (id: string, userData: IUser): Promise<IResultToResponse> => {
+  const user =  await getRepository(User).findOne(id);
 
-  if (user.length === 0) {
+  if (user === undefined) {
     return {code: StatusCodes.NOT_FOUND, message: `User id = ${id} not found in DB`};
   }
 
@@ -93,13 +97,9 @@ const updateUser = (id: string, userData: IUser): IResultToResponse => {
     return result;
   }
 
-  const index = users.indexOf(user[0]);
+  const updatedUser = await getRepository(User).update(id, userData);
 
-  users[index].name = userData.name;
-  users[index].login = userData.login;
-  users[index].password = userData.password;
-
-  return {code: StatusCodes.OK, message: User.toResponse(users[index])};
+  return {code: StatusCodes.OK, message: updatedUser.raw[0]};
 
 };
 
@@ -108,22 +108,16 @@ const updateUser = (id: string, userData: IUser): IResultToResponse => {
  * @param id - user id
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
-const deleteUser = (id: string): IResultToResponse => {
-  const result =  users.filter(item => item.id === id);
+const deleteUser = async (id: string): Promise<IResultToResponse> => {
+  const result =  getRepository(User).findOne(id);
 
-  if (result.length === 0) {
+  if (result === undefined) {
     return {code: StatusCodes.BAD_REQUEST, message: `User id ${id} not found in DB`};
   }
 
-  const index = users.indexOf(result[0]);
+  await getRepository(User).delete(id);
 
-  if (index > -1) {
-    users.splice(index, 1);
-
-    return {code: StatusCodes.NO_CONTENT, message: `User id ${id} was deleted successfully`};
-  }
-
-  return {code: StatusCodes.BAD_REQUEST, message: `User id ${id} not found in DB`};
+  return {code: StatusCodes.NO_CONTENT, message: `User id ${id} was deleted successfully`};
 };
 
 export default {

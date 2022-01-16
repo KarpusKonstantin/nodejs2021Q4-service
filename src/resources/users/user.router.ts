@@ -19,28 +19,23 @@ router.get('/users/:id', async (ctx) => {
 });
 
 router.post('/users', async (ctx) => {
-  ctx.req.on('data', async (data) => {
-    const jsonData = JSON.parse(data);
-    const user = usersService.createUser(jsonData);
+  const { body } = ctx.request;
+  const user = await usersService.createUser(body);
 
-    ctx.status = user.code;
-    ctx.body = user.message;
-
-  });
+  ctx.status = user.code;
+  ctx.body = user.message;
 });
 
 router.put('/users/:id', async (ctx) => {
-  ctx.req.on('data', async (data) => {
-    const jsonData = JSON.parse(data);
-    const user = usersService.updateUser(ctx.params.id, jsonData);
+  const { body } = ctx.request;
+  const user = await usersService.updateUser(ctx.params.id, body);
 
-    ctx.status = user.code;
-    ctx.body = user.message;
-  });
+  ctx.status = user.code;
+  ctx.body = user.message;
 })
 
 router.delete('/users/:id', async (ctx) => {
-  const result = usersService.deleteUser(ctx.params.id);
+  const result = await usersService.deleteUser(ctx.params.id);
 
   ctx.status = result.code;
   ctx.body = result.message;

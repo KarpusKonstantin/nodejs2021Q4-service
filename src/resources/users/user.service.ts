@@ -10,7 +10,7 @@ import { IUser } from './user.model';
  * Returns all user list
  * @returns IResultToResponse - code = http status code (type is number) and message = user list
  */
-const getAllUsers = (): IResultToResponse => usersRepository.getAllUsers();
+const getAllUsers = (): Promise<IResultToResponse> => usersRepository.getAllUsers();
 
 
 /**
@@ -18,7 +18,7 @@ const getAllUsers = (): IResultToResponse => usersRepository.getAllUsers();
  * @param id - user ID
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
-const getUserById =  (id: string): IResultToResponse => usersRepository.getUserById(id);
+const getUserById =  (id: string): Promise<IResultToResponse> => usersRepository.getUserById(id);
 
 
 /**
@@ -26,7 +26,7 @@ const getUserById =  (id: string): IResultToResponse => usersRepository.getUserB
  * @param userData - user data (IUser)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
-const createUser =  (userData: IUser): IResultToResponse => usersRepository.createUser(userData);
+const createUser =  (userData: IUser): Promise<IResultToResponse> => usersRepository.createUser(userData);
 
 
 /**
@@ -35,20 +35,26 @@ const createUser =  (userData: IUser): IResultToResponse => usersRepository.crea
  * @param userData - user data (IUser)
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
-const updateUser =  (id: string, userData: IUser): IResultToResponse => usersRepository.updateUser(id, userData);
+const updateUser =  (id: string, userData: IUser): Promise<IResultToResponse> => usersRepository.updateUser(id, userData);
 
 /**
  * Delete record of users and set to null all links in tasks
  * @param id - user id
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
-const deleteUser = (id: string): IResultToResponse => {
-  const result: IResultToResponse = usersRepository.deleteUser(id);
+const deleteUser = async (id: string): Promise<IResultToResponse> => {
+  const result: IResultToResponse = await usersRepository.deleteUser(id);
 
-  setUserIdToNull(id);
+  // setUserIdToNull(id);
 
   return { code: StatusCodes.OK, message: result.message }
 }
 
 
-export default { getAllUsers, getUserById, createUser, updateUser, deleteUser };
+export default {
+   getAllUsers,
+   getUserById,
+   createUser,
+   updateUser,
+   deleteUser
+};
