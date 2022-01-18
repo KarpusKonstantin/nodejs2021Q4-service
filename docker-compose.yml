@@ -1,0 +1,43 @@
+version: "3"
+
+volumes:
+  db:
+  logs:
+
+services:
+  postgres:
+    build: ./postgresdb
+    image: kostik1986/rs-app-postgres
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - network
+    env_file:
+      - .env
+
+  nodes:
+    build: .
+    image: kostik1986/rs-app-node
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      PORT: ${PORT}
+    restart: always
+    depends_on:
+      - postgres
+    volumes:
+      - logs:/rs-app/logs
+      - ./:/rs-app
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
