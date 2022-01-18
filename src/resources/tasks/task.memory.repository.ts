@@ -118,7 +118,7 @@ export const deleteTasksByBorderId = async (boardId: string): Promise<void> => {
  */
 export const setUserIdToNull = async (userId: string) => {
   try {
-    await getRepository(Task).update({ userId }, { userId: null});
+    await getRepository(Task).update({ userId }, { userId: undefined});
 
   } catch (e) {
     // console.error(e);

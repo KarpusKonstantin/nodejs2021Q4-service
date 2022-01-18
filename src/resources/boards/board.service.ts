@@ -39,9 +39,8 @@ const updateBoard =  (id: string, boardData: IBoard): Promise<IResultToResponse>
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IBoard
  */
 const deleteBoard = async (id: string): Promise<IResultToResponse> => {
+  await deleteTasksByBorderId(id);
   const result = await boardsRepository.deleteBoard(id);
-
-  deleteTasksByBorderId(id);
 
   return { code: StatusCodes.OK, message: result.message }
 }

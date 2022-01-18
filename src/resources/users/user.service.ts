@@ -43,9 +43,8 @@ const updateUser =  (id: string, userData: IUser): Promise<IResultToResponse> =>
  * @returns IResultToResponse - code = http status code (type is number) and message = string or IUser
  */
 const deleteUser = async (id: string): Promise<IResultToResponse> => {
-  const result: IResultToResponse = await usersRepository.deleteUser(id);
-
   await setUserIdToNull(id);
+  const result: IResultToResponse = await usersRepository.deleteUser(id);
 
   return { code: StatusCodes.OK, message: result.message }
 }
