@@ -14,6 +14,8 @@ import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
 import loginRouter from './resources/login/login.router';
 
+import checkToken from './auth/authService'
+
 createConnection()
   .then(() => {
   console.log('PostgresSQL is running!');
@@ -57,6 +59,8 @@ app.use(async (ctx, next) => {
   ctx.set('X-Response-Time', `${ms}ms`);
 });
 
+
+app.use(checkToken);
 app.use(loginRouter.routes()).use(loginRouter.allowedMethods());
 
 app.use(userRouter.routes()).use(userRouter.allowedMethods());
