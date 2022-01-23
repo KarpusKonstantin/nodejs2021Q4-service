@@ -49,11 +49,14 @@ const deleteUser = async (id: string): Promise<IResultToResponse> => {
   return { code: StatusCodes.OK, message: result.message }
 }
 
+const getUserByLoginAndPassword = (login: string, password: string): Promise<IResultToResponse> =>  usersRepository.getUserByLoginAndPassword(login, password);
+
 
 export default {
    getAllUsers,
    getUserById,
    createUser,
    updateUser,
-   deleteUser
+   deleteUser,
+   getUserByLoginAndPassword
 };

@@ -6,3 +6,5 @@ export default interface IResultToResponse{
   code: number,
   message: string | IBoard[] | IBoard | ITask[] | ITask | IUser[] | IUser
 }
+
+

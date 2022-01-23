@@ -12,6 +12,7 @@ import { IMessage, MyLogger } from './logger';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
+import loginRouter from './resources/login/login.router';
 
 createConnection()
   .then(() => {
@@ -55,6 +56,8 @@ app.use(async (ctx, next) => {
   const ms = Date.now() - start;
   ctx.set('X-Response-Time', `${ms}ms`);
 });
+
+app.use(loginRouter.routes()).use(loginRouter.allowedMethods());
 
 app.use(userRouter.routes()).use(userRouter.allowedMethods());
 app.use(boardRouter.routes()).use(boardRouter.allowedMethods());

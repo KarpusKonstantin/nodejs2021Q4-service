@@ -47,7 +47,7 @@
     ]
   },
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "http-status-codes": "^2.1.4",
@@ -65,6 +65,8 @@
     "yamljs": "0.3.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/koa": "^2.13.4",
     "@types/koa-bodyparser": "^4.3.5",
     "@types/koa-router": "^7.4.4",

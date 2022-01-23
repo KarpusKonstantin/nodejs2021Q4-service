@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { getRepository } from 'typeorm';
+import bcrypt from 'bcryptjs';
 import User, { IUser } from './user.model';
 import IResultToResponse from '../../common/globalInterafaces';
 
@@ -130,10 +131,28 @@ const deleteUser = async (id: string): Promise<IResultToResponse> => {
   return {code: StatusCodes.NO_CONTENT, message: `User id ${id} was deleted successfully`};
 };
 
+const getUserByLoginAndPassword = async (login: string, password: string): Promise<IResultToResponse> => {
+
+  const result = await getRepository(User).findOne({ where: { login }});
+
+  if (result === undefined) {
+    return {code: StatusCodes.FORBIDDEN, message: 'Forbidden' };
+  }
+
+  const passwordTrue = await bcrypt.compare(password, result.password)
+
+  if (!passwordTrue) {
+    return {code: StatusCodes.FORBIDDEN, message: 'Forbidden' };
+  }
+
+  return {code: StatusCodes.OK, message: result};
+};
+
 export default {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getUserByLoginAndPassword
 };
