@@ -13,7 +13,7 @@ const tokenVerify = (token: string) => {
   }
 };
 
-const checkToken = async (ctx: ParameterizedContext, next: Next) => {
+export default async function checkToken(ctx: ParameterizedContext, next: Next) {
 
   if (!permittedURL.includes(ctx.request.url)) {
 
@@ -37,8 +37,4 @@ const checkToken = async (ctx: ParameterizedContext, next: Next) => {
 
   await next();
 
-}
-
-export default {
-  checkToken
 }
