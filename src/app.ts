@@ -4,8 +4,9 @@
 
 import Koa from 'koa';
 import bodyParser = require("koa-bodyparser");
+import bcrypt from 'bcryptjs';
 
-import { createConnection } from "typeorm";
+import { createConnection, getRepository } from 'typeorm';
 import { IMessage, MyLogger } from './logger';
 // const json = require('koa-json');
 
@@ -15,12 +16,18 @@ import taskRouter from './resources/tasks/task.router';
 import loginRouter from './resources/login/login.router';
 
 import checkToken from './auth/authService'
+import User from './resources/users/user.model';
 
-createConnection()
-  .then(() => {
+createConnection().then(async () => {
+  await getRepository(User).save({
+    login: 'admin',
+    password: await bcrypt.hash('admin', 10),
+    name: 'admin',
+  });
+
   console.log('PostgresSQL is running!');
-})
-  .catch(error => console.log(error));
+});
+
 
 // const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
