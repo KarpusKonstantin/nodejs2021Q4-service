@@ -54,6 +54,17 @@ To run only specific test suite with authorization (users, boards or tasks)
 ```
 npm run test:auth <suite name>
 ```
+## Docker
+```
+docker-compose build 
+docker-compose up -d
+
+After install need run next commands in docker (node) terminal for generate and run migration:
+
+npm run migration:generate
+npm run migration:run
+```
+
 
 ## Development
 
