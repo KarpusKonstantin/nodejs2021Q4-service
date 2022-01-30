@@ -11,6 +11,7 @@ const {JWT_SECRET_KEY} = process.env
 const {LOGGER_LEVEL} = process.env
 const AUTH_MODE= process.env.AUTH_MODE === 'true'
 
+const { POSTGRES_HOST } = process.env
 const { POSTGRES_PORT } = process.env
 const { POSTGRES_USER } = process.env
 const { POSTGRES_PASSWORD } = process.env
@@ -23,6 +24,7 @@ export {
   JWT_SECRET_KEY,
   AUTH_MODE,
   LOGGER_LEVEL,
+  POSTGRES_HOST,
   POSTGRES_PORT,
   POSTGRES_USER,
   POSTGRES_PASSWORD,
