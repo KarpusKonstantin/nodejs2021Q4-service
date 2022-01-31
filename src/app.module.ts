@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
+import { BoardModule } from './board/board.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { User } from './user/user.entity';
       //   migrationsDir: 'src/migrations',
       // },
     }),
-    UserModule],
+    UserModule,
+    BoardModule],
   controllers: [AppController],
   providers: [AppService],
 })

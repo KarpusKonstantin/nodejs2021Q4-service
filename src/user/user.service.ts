@@ -26,6 +26,8 @@ export class UserService {
     const insertResult = await this.usersRepository.insert(createUserDto);
     const user = await this.usersRepository.findOne(insertResult.identifiers[0].id);
 
+    delete user.password;
+
     return user;
   }
 
