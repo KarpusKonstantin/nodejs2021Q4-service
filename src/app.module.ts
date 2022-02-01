@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
 import { BoardModule } from './board/board.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { BoardModule } from './board/board.module';
       // },
     }),
     UserModule,
-    BoardModule],
+    BoardModule,
+    TaskModule],
   controllers: [AppController],
   providers: [AppService],
 })

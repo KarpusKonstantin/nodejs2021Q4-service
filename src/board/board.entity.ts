@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Task } from '../task/task.entiry';
 
 @Entity('board')
 export class Board {
@@ -12,8 +13,8 @@ export class Board {
   @Column()
   title: string;
 
-  // @OneToMany(() => Task, (task) => task.board)
-  // tasks!: Task[];
+  @OneToMany(() => Task, (task) => task.board)
+  tasks!: Task[];
 
   // @OneToMany(() => Task, (task) => task.user)
   // tasks?: Task[];
