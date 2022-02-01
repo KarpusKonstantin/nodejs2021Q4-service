@@ -4,22 +4,40 @@ import { Repository } from 'typeorm';
 import { Board } from './board.entity';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { TaskService } from '../task/task.service';
 
 @Injectable()
 export class BoardService {
 
 
-  constructor(@InjectRepository(Board) private boardsRepository: Repository<Board>) {}
+  constructor(@InjectRepository(Board) private boardsRepository: Repository<Board>,
+              private taskService: TaskService) {}
 
   async getAllBoards(): Promise<Board[]> {
     return this.boardsRepository.find();
   };
 
   async getBoardById(id: string): Promise<Board> {
-    return this.boardsRepository.findOne(id);
+    const result = await this.boardsRepository.findOne(id);
+
+    if (result === undefined) {
+      throw new HttpException(`Доска с id = ${id} не найден.`, HttpStatus.NOT_FOUND);
+    }
+
+    return result;
   }
 
   async removeBoard(id: string): Promise<void> {
+    const result = await this.boardsRepository.findOne(id);
+
+    console.log('Board Remove 1 >>', result, id);
+    if (result === undefined) {
+      console.log('Board Remove 2 >>', id);
+
+      throw new HttpException(`Доска с id = ${id} не найден.`, HttpStatus.NOT_FOUND);
+    }
+
+    await this.taskService.deleteTasksByBorderId(id);
     await this.boardsRepository.delete(id);
   }
 

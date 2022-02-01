@@ -9,6 +9,7 @@ import { Task } from './task.entiry';
   controllers: [TaskController],
   imports: [
     TypeOrmModule.forFeature([Task])
-  ]
+  ],
+  exports: [TaskService]
 })
 export class TaskModule {}

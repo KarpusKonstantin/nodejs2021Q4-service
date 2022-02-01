@@ -15,7 +15,14 @@ export class TaskService {
   }
 
   async getTaskByBoardIdAndTaskId (boardId: string, taskId: string): Promise<Task> {
-    return this.taskRepository.findOne({ where: { id: taskId, boardId} });
+    const result = await this.taskRepository.findOne({ where: { id: taskId, boardId} });
+
+    if (result === undefined) {
+      throw new HttpException(`Задача с id = ${taskId} не найдена.`, HttpStatus.NOT_FOUND);
+    }
+
+    return result;
+
   };
 
   async createTask (boardId: string | null | undefined, createTaskDto: CreateTaskDto): Promise<Task> {
@@ -40,11 +47,11 @@ export class TaskService {
   };
 
   async removeTask (boardId: string, taskId: string): Promise<void> {
-    await this.taskRepository.delete({ id: taskId, boardId });
+    const a = await this.taskRepository.delete({ id: taskId, boardId });
   };
 
   async deleteTasksByBorderId (boardId: string): Promise<void> {
-    await this.taskRepository.delete({ boardId });
+    const a = await this.taskRepository.delete({ boardId });
   };
 
   async setUserIdToNull (userId: string): Promise<void> {
