@@ -30,10 +30,7 @@ export class BoardService {
   async removeBoard(id: string): Promise<void> {
     const result = await this.boardsRepository.findOne(id);
 
-    console.log('Board Remove 1 >>', result, id);
     if (result === undefined) {
-      console.log('Board Remove 2 >>', id);
-
       throw new HttpException(`Доска с id = ${id} не найден.`, HttpStatus.NOT_FOUND);
     }
 

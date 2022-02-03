@@ -55,7 +55,8 @@ export class TaskService {
   };
 
   async setUserIdToNull (userId: string): Promise<void> {
-    await this.taskRepository.update({ userId }, { userId: undefined});
+    const a = await this.taskRepository.update({ userId }, { userId: undefined});
+    console.log('SET USER ID >>', a);
   };
 
 }

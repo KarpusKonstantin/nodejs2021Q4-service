@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
 import { BoardModule } from './board/board.module';
 import { TaskModule } from './task/task.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { TaskModule } from './task/task.module';
     }),
     UserModule,
     BoardModule,
-    TaskModule],
+    TaskModule,
+    AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
