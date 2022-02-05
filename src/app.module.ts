@@ -8,11 +8,18 @@ import { User } from './user/user.entity';
 import { BoardModule } from './board/board.module';
 import { TaskModule } from './task/task.module';
 import { AuthModule } from './auth/auth.module';
+import { FilesModule } from './files/files.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env`
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, '..', 'upload'),
+      serveRoot: '/file'
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -37,7 +44,8 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     BoardModule,
     TaskModule,
-    AuthModule],
+    AuthModule,
+    FilesModule],
   controllers: [AppController],
   providers: [AppService],
 })
