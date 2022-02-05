@@ -1,13 +1,28 @@
-import {IsEmail, IsString, Length} from "class-validator";
-import { Column } from 'typeorm';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateTaskDto {
 
-  readonly boardId: string;
+  @IsNotEmpty()
+  @IsString()
+  readonly title: string;
 
-  readonly description: string;
-
+  @IsNotEmpty()
+  @IsNumber()
   readonly order: number;
 
-  readonly title: string;
+  @IsOptional()
+  @IsString()
+  readonly description?: string;
+
+  @IsOptional()
+  @IsString()
+  readonly userId?: string | null;
+
+  @IsOptional()
+  @IsString()
+  readonly boardId: string | null;
+
+  @IsOptional()
+  @IsString()
+  readonly columnId?: string | null;
 }
