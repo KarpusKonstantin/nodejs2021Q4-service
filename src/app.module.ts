@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
+import { Board } from './board/board.entity';
+import { Task } from './task/task.entiry';
 
 @Module({
   imports: [
@@ -28,18 +30,13 @@ import * as path from 'path';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [User],
-      synchronize: true,
-      autoLoadEntities: true,
-
-      // migrationsRun: true,
-      // logging: true,
-      // logger: 'file',
-      //
-      // migrations: ['src/migrations/*{.ts,.js}'],
-      // cli: {
-      //   migrationsDir: 'src/migrations',
-      // },
+      entities: [User, Task, Board],
+      synchronize: false,
+      migrationsRun: true,
+      migrations: [`./dist/migrations/*{.ts,.js}`],
+      cli: {
+        migrationsDir: `./dist/migrations`,
+      },
     }),
     UserModule,
     BoardModule,
